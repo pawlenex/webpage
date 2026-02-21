@@ -232,8 +232,7 @@ jobs:
           \`\`\`
 
           ---
-          > **Approve and merge** this PR to complete the deployment." \
-            --label "deployment")
+          > **Approve and merge** this PR to complete the deployment.")
 
           echo "✅ PR created: ${PR_URL}"
           PR_NUMBER=$(echo "$PR_URL" | grep -o '[0-9]*$')
