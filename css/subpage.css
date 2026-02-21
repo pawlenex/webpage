@@ -1,0 +1,438 @@
+/* ============================================================
+   PawLenx — Subpage Styles
+   Shared styles for all service subpages
+   ============================================================ */
+
+/* ─── Subpage Hero ─── */
+.subpage-hero {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: flex-end;
+  padding: 80px 0 60px;
+  overflow: hidden;
+}
+
+.subpage-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.subpage-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.subpage-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.85) 60%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+
+.subpage-hero-overlay--dark {
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.4) 0%,
+    rgba(15, 23, 42, 0.85) 60%,
+    rgba(15, 23, 42, 1) 100%
+  );
+}
+
+.subpage-hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.subpage-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--color-dark);
+  margin-bottom: 16px;
+}
+
+.subpage-title--light {
+  color: #fff;
+}
+
+.subpage-subtitle {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1.2rem;
+  color: var(--color-text);
+  max-width: 640px;
+  line-height: 1.7;
+}
+
+.subpage-subtitle--light {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ─── Highlight Variants ─── */
+.highlight--orange {
+  color: #F59E0B;
+}
+
+.highlight--purple {
+  color: #8B5CF6;
+}
+
+/* ─── Breadcrumb ─── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.breadcrumb a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  color: var(--color-text-light);
+}
+
+.breadcrumb svg {
+  color: var(--color-text-light);
+  flex-shrink: 0;
+}
+
+.breadcrumb--light a {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.breadcrumb--light a:hover {
+  color: #fff;
+}
+
+.breadcrumb--light span {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.breadcrumb--light svg {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ─── Subpage Sections ─── */
+.subpage-section {
+  padding: 80px 0;
+}
+
+.subpage-section--alt {
+  background-color: var(--color-gray-50, #F9FAFB);
+}
+
+/* ─── Card Grid ─── */
+.card-grid {
+  display: grid;
+  gap: 32px;
+  margin-top: 48px;
+}
+
+.card-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.card-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* ─── Info Cards ─── */
+.info-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 28px;
+  border: 1px solid var(--color-border, #E5E7EB);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.info-card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.info-card h3 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 12px;
+}
+
+.info-card p {
+  font-family: 'Nunito Sans', sans-serif;
+  color: var(--color-text);
+  line-height: 1.7;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+}
+
+.info-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.info-card-list li {
+  position: relative;
+  padding-left: 20px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 2;
+}
+
+.info-card-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.info-card--orange .info-card-list li::before {
+  background: #F59E0B;
+}
+
+.info-card--purple .info-card-list li::before {
+  background: #8B5CF6;
+}
+
+.info-card-tag {
+  display: inline-block;
+  padding: 4px 14px;
+  background: var(--color-primary-light, #E0F2FE);
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 20px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.info-card-tag--orange {
+  background: #FEF3C7;
+  color: #D97706;
+}
+
+.info-card-tag--purple {
+  background: #EDE9FE;
+  color: #7C3AED;
+}
+
+/* ─── Feature Icon Variants ─── */
+.feature-icon--orange {
+  background: #FEF3C7 !important;
+}
+
+.feature-icon--purple {
+  background: #EDE9FE !important;
+}
+
+/* ─── Button Variants ─── */
+.btn-orange {
+  background: #F59E0B !important;
+  border-color: #F59E0B !important;
+}
+
+.btn-orange:hover {
+  background: #D97706 !important;
+  border-color: #D97706 !important;
+}
+
+.btn-purple {
+  background: #8B5CF6 !important;
+  border-color: #8B5CF6 !important;
+}
+
+.btn-purple:hover {
+  background: #7C3AED !important;
+  border-color: #7C3AED !important;
+}
+
+/* ─── Subpage Stats ─── */
+.subpage-stats {
+  background: var(--color-primary);
+  padding: 60px 0;
+}
+
+.subpage-stats .stat-card {
+  text-align: center;
+  background: transparent;
+  box-shadow: none;
+}
+
+.subpage-stats .stat-number {
+  font-family: 'Nunito', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.subpage-stats .stat-label {
+  font-family: 'Nunito Sans', sans-serif;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.subpage-stats--purple {
+  background: #8B5CF6;
+}
+
+/* ─── Subpage CTA ─── */
+.subpage-cta {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  padding: 80px 0;
+  text-align: center;
+}
+
+.subpage-cta h2 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.subpage-cta p {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 32px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.subpage-cta .btn {
+  background: #fff;
+  color: var(--color-primary);
+  font-weight: 700;
+  border-color: #fff;
+}
+
+.subpage-cta .btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+
+.subpage-cta--orange {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+}
+
+.subpage-cta--orange .btn {
+  color: #D97706;
+}
+
+.subpage-cta--purple {
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+}
+
+.subpage-cta--purple .btn {
+  color: #7C3AED;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .subpage-title {
+    font-size: 2.8rem;
+  }
+
+  .card-grid--3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .subpage-hero {
+    min-height: 380px;
+    padding: 100px 0 40px;
+  }
+
+  .subpage-title {
+    font-size: 2.2rem;
+  }
+
+  .subpage-subtitle {
+    font-size: 1.05rem;
+  }
+
+  .subpage-section {
+    padding: 60px 0;
+  }
+
+  .card-grid--3,
+  .card-grid--2 {
+    grid-template-columns: 1fr;
+  }
+
+  .subpage-cta h2 {
+    font-size: 1.8rem;
+  }
+
+  .subpage-stats .stat-number {
+    font-size: 2.2rem;
+  }
+
+  .split-layout {
+    flex-direction: column !important;
+  }
+
+  .split-layout--reverse {
+    flex-direction: column !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .subpage-hero {
+    min-height: 320px;
+    padding: 90px 0 32px;
+  }
+
+  .subpage-title {
+    font-size: 1.8rem;
+  }
+
+  .breadcrumb {
+    font-size: 0.8rem;
+    gap: 4px;
+  }
+
+  .info-card {
+    padding: 24px 20px;
+  }
+
+  .subpage-cta {
+    padding: 60px 0;
+  }
+
+  .subpage-cta h2 {
+    font-size: 1.5rem;
+  }
+}
