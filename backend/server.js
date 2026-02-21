@@ -24,7 +24,7 @@ const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
  * Upload a file to GitHub using the Contents API
  * PUT /repos/{owner}/{repo}/contents/{path}
  */
-function uploadToGitHub(filePath, fileName) {
+function uploadToGitHub(filePath, githubPath) {
   return new Promise((resolve, reject) => {
     if (!GITHUB_TOKEN) {
       console.warn('⚠️  GITHUB_TOKEN not set — skipping GitHub upload');
@@ -33,17 +33,17 @@ function uploadToGitHub(filePath, fileName) {
 
     const fileContent = fs.readFileSync(filePath);
     const base64Content = fileContent.toString('base64');
-    const githubPath = `applications/${fileName}`;
 
     const body = JSON.stringify({
-      message: `📄 New application: ${fileName}`,
+      message: `📄 New file: ${githubPath}`,
       content: base64Content,
       branch: GITHUB_BRANCH
     });
 
+    const encodedPath = githubPath.split('/').map(encodeURIComponent).join('/');
     const options = {
       hostname: 'api.github.com',
-      path: `/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodeURIComponent(githubPath)}`,
+      path: `/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodedPath}`,
       method: 'PUT',
       headers: {
         'Authorization': `Bearer ${GITHUB_TOKEN}`,
@@ -90,32 +90,25 @@ if (!fs.existsSync(APPLICATIONS_DIR)) {
 app.use(cors());
 app.use(express.json());
 
-// ─── Multer storage config ───
+// ─── Multer storage config — per-applicant folders ───
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // We'll set the real destination after parsing form fields
+    // For now, use a temp dir; we'll move files in the route handler
     cb(null, APPLICATIONS_DIR);
   },
   filename: (req, file, cb) => {
-    // Use the original filename from the client (FirstName_LastName_Application.pdf)
-    // Sanitize to prevent path traversal
     const safeName = file.originalname
       .replace(/[^a-zA-Z0-9_\-\.]/g, '_')
       .replace(/_{2,}/g, '_');
-    
-    // Add timestamp to avoid overwrites
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const ext = path.extname(safeName);
-    const base = path.basename(safeName, ext);
-    const finalName = `${base}_${timestamp}${ext}`;
-    
-    cb(null, finalName);
+    cb(null, safeName);
   }
 });
 
 const upload = multer({
   storage,
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10 MB max
+    fileSize: 10 * 1024 * 1024, // 10 MB max per file
   },
   fileFilter: (req, file, cb) => {
     if (file.mimetype === 'application/pdf') {
@@ -126,6 +119,12 @@ const upload = multer({
   }
 });
 
+// Accept both 'application' and 'resume' fields
+const uploadFields = upload.fields([
+  { name: 'application', maxCount: 1 },
+  { name: 'resume', maxCount: 1 }
+]);
+
 // ─── Routes ───
 
 // Health check
@@ -133,45 +132,80 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'pawlenx-backend', timestamp: new Date().toISOString() });
 });
 
-// Submit application (receive PDF)
-app.post('/api/applications/submit', upload.single('application'), async (req, res) => {
+// Submit application (receive Application PDF + Resume PDF)
+app.post('/api/applications/submit', uploadFields, async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No PDF file received' });
+    const appFile = req.files && req.files['application'] ? req.files['application'][0] : null;
+    const resumeFile = req.files && req.files['resume'] ? req.files['resume'][0] : null;
+
+    if (!appFile) {
+      return res.status(400).json({ error: 'No application PDF received' });
     }
 
     const { applicantName, jobTitle, email } = req.body;
+
+    // Create per-applicant folder: FirstName_LastName_YYYYMMDD-HHMMSS
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').slice(0, 19);
+    const safeName = (applicantName || 'Unknown')
+      .replace(/[^a-zA-Z0-9 ]/g, '')
+      .replace(/\s+/g, '_');
+    const folderName = `${safeName}_${timestamp}`;
+    const applicantDir = path.join(APPLICATIONS_DIR, folderName);
+    fs.mkdirSync(applicantDir, { recursive: true });
+
+    // Move application PDF into applicant folder
+    const appDest = path.join(applicantDir, `${safeName}_Application.pdf`);
+    fs.renameSync(appFile.path, appDest);
+
+    // Move resume PDF into applicant folder
+    let resumeDest = null;
+    if (resumeFile) {
+      const resumeExt = path.extname(resumeFile.originalname) || '.pdf';
+      resumeDest = path.join(applicantDir, `${safeName}_Resume${resumeExt}`);
+      fs.renameSync(resumeFile.path, resumeDest);
+    }
 
     console.log('─────────────────────────────────────────');
     console.log('📄 New Application Received');
     console.log(`   Applicant: ${applicantName || 'Unknown'}`);
     console.log(`   Position:  ${jobTitle || 'Not specified'}`);
     console.log(`   Email:     ${email || 'Not provided'}`);
-    console.log(`   File:      ${req.file.filename}`);
-    console.log(`   Size:      ${(req.file.size / 1024).toFixed(1)} KB`);
-    console.log(`   Saved to:  ${req.file.path}`);
+    console.log(`   Folder:    ${folderName}/`);
+    console.log(`   App PDF:   ${safeName}_Application.pdf`);
+    if (resumeDest) {
+      console.log(`   Resume:    ${safeName}_Resume.pdf`);
+    }
     console.log('─────────────────────────────────────────');
 
-    // Upload PDF to GitHub repo
-    let githubResult = null;
+    // Upload both files to GitHub repo
+    let githubUploaded = false;
     try {
-      githubResult = await uploadToGitHub(req.file.path, req.file.filename);
-      if (githubResult.skipped) {
-        console.log('⚠️  GitHub upload skipped (no token configured)');
+      // Upload application PDF
+      const ghAppPath = `applications/${folderName}/${safeName}_Application.pdf`;
+      await uploadToGitHub(appDest, ghAppPath);
+
+      // Upload resume PDF
+      if (resumeDest) {
+        const ghResumePath = `applications/${folderName}/${safeName}_Resume.pdf`;
+        await uploadToGitHub(resumeDest, ghResumePath);
       }
+
+      githubUploaded = true;
     } catch (ghErr) {
-      console.error('⚠️  GitHub upload failed, but local copy saved:', ghErr.message);
+      console.error('⚠️  GitHub upload failed, but local copies saved:', ghErr.message);
     }
 
     res.json({
       success: true,
       message: 'Application received successfully',
       data: {
-        fileName: req.file.filename,
+        folder: folderName,
+        applicationFile: `${safeName}_Application.pdf`,
+        resumeFile: resumeDest ? `${safeName}_Resume.pdf` : null,
         applicantName,
         jobTitle,
         receivedAt: new Date().toISOString(),
-        githubUploaded: githubResult && !githubResult.skipped ? true : false
+        githubUploaded
       }
     });
   } catch (err) {
@@ -183,19 +217,28 @@ app.post('/api/applications/submit', upload.single('application'), async (req, r
 // List applications (admin endpoint)
 app.get('/api/applications', (req, res) => {
   try {
-    const files = fs.readdirSync(APPLICATIONS_DIR)
-      .filter(f => f.endsWith('.pdf'))
-      .map(f => {
-        const stats = fs.statSync(path.join(APPLICATIONS_DIR, f));
+    const entries = fs.readdirSync(APPLICATIONS_DIR, { withFileTypes: true });
+    const applicants = entries
+      .filter(e => e.isDirectory())
+      .map(dir => {
+        const dirPath = path.join(APPLICATIONS_DIR, dir.name);
+        const files = fs.readdirSync(dirPath).map(f => {
+          const stats = fs.statSync(path.join(dirPath, f));
+          return {
+            fileName: f,
+            size: `${(stats.size / 1024).toFixed(1)} KB`,
+          };
+        });
+        const stats = fs.statSync(dirPath);
         return {
-          fileName: f,
-          size: `${(stats.size / 1024).toFixed(1)} KB`,
+          folder: dir.name,
+          files,
           receivedAt: stats.mtime.toISOString()
         };
       })
       .sort((a, b) => new Date(b.receivedAt) - new Date(a.receivedAt));
 
-    res.json({ total: files.length, applications: files });
+    res.json({ total: applicants.length, applications: applicants });
   } catch (err) {
     console.error('Error listing applications:', err);
     res.status(500).json({ error: 'Failed to list applications' });
