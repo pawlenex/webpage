@@ -111,6 +111,73 @@
   margin-bottom: 16px;
 }
 
+.job-role-sub {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.job-section {
+  margin-bottom: 20px;
+}
+
+.job-section h4 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 10px;
+}
+
+.job-responsibilities {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.job-responsibilities li {
+  position: relative;
+  padding-left: 22px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 1.9;
+}
+
+.job-responsibilities li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 11px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.job-responsibilities--green li::before {
+  background: #22C55E;
+}
+
+.job-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.job-tool {
+  display: inline-block;
+  padding: 5px 14px;
+  background: var(--color-primary-light, #E0F2FE);
+  color: var(--color-primary);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 20px;
+}
+
 .job-details {
   display: flex;
   gap: 24px;
