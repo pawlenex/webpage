@@ -1,0 +1,252 @@
+# ============================================================
+# PawLenx — CI/CD Pipeline
+# Workflow: On push to main → create feature branch → build 
+# Docker image → create PR → merge on approval
+# ============================================================
+
+name: PawLenx CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '*.md'
+      - 'LICENSE'
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+env:
+  IMAGE_NAME: pawlenx-web
+  REGISTRY: ghcr.io
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Job 1: Build & Test with Docker
+  # ─────────────────────────────────────────────
+  build-and-test:
+    name: 🐳 Build & Test Docker Image
+    runs-on: ubuntu-latest
+
+    outputs:
+      branch_name: ${{ steps.create-branch.outputs.branch_name }}
+      short_sha: ${{ steps.vars.outputs.short_sha }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Set build variables
+        id: vars
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          TIMESTAMP=$(date +'%Y%m%d-%H%M%S')
+          BRANCH_NAME="deploy/${TIMESTAMP}-${SHORT_SHA}"
+          echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "timestamp=${TIMESTAMP}" >> $GITHUB_OUTPUT
+          echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔐 Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏗️ Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          load: true
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.short_sha }}
+            ${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: 🧪 Test container starts and responds
+        run: |
+          echo "Starting container..."
+          docker run -d --name test-pawlenx -p 8080:80 ${{ env.IMAGE_NAME }}:latest
+
+          echo "Waiting for container to be healthy..."
+          sleep 5
+
+          echo "Testing healthcheck endpoint..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/healthz)
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Healthcheck passed (HTTP $HTTP_STATUS)"
+          else
+            echo "❌ Healthcheck failed (HTTP $HTTP_STATUS)"
+            docker logs test-pawlenx
+            exit 1
+          fi
+
+          echo "Testing main page..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Main page loads (HTTP $HTTP_STATUS)"
+          else
+            echo "❌ Main page failed (HTTP $HTTP_STATUS)"
+            docker logs test-pawlenx
+            exit 1
+          fi
+
+          echo "Verifying page content..."
+          CONTENT=$(curl -s http://localhost:8080/)
+          if echo "$CONTENT" | grep -q "PawLenx"; then
+            echo "✅ Page content verified — 'PawLenx' found"
+          else
+            echo "❌ Page content missing — 'PawLenx' not found"
+            exit 1
+          fi
+
+          echo "Checking static assets..."
+          CSS_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/css/styles.css)
+          JS_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/js/main.js)
+          echo "CSS: HTTP $CSS_STATUS | JS: HTTP $JS_STATUS"
+
+          if [ "$CSS_STATUS" -eq 200 ] && [ "$JS_STATUS" -eq 200 ]; then
+            echo "✅ All static assets accessible"
+          else
+            echo "❌ Static assets check failed"
+            exit 1
+          fi
+
+          docker stop test-pawlenx
+          docker rm test-pawlenx
+          echo "🎉 All tests passed!"
+
+      - name: 📦 Push Docker image to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.short_sha }}
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ─────────────────────────────────────────────
+  # Job 2: Create deployment branch & PR
+  # ─────────────────────────────────────────────
+  create-pr:
+    name: 🔀 Create Deployment PR
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Set build variables
+        id: vars
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          TIMESTAMP=$(date +'%Y%m%d-%H%M%S')
+          BRANCH_NAME="deploy/${TIMESTAMP}-${SHORT_SHA}"
+          echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "branch_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+      - name: 🌿 Create deployment branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          BRANCH_NAME="${{ steps.vars.outputs.branch_name }}"
+          echo "Creating branch: ${BRANCH_NAME}"
+
+          git checkout -b "${BRANCH_NAME}"
+
+          # Add a deployment manifest to track the build
+          cat > DEPLOYMENT.md << EOF
+          # Deployment Info
+
+          - **Commit:** ${{ github.sha }}
+          - **Short SHA:** ${{ steps.vars.outputs.short_sha }}
+          - **Branch:** ${BRANCH_NAME}
+          - **Triggered by:** ${{ github.actor }}
+          - **Timestamp:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+          - **Docker Image:** ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.short_sha }}
+          - **Workflow Run:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EOF
+
+          git add DEPLOYMENT.md
+          git commit -m "deploy: build ${{ steps.vars.outputs.short_sha }} — $(date +'%Y-%m-%d %H:%M')"
+          git push origin "${BRANCH_NAME}"
+
+      - name: 📋 Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        id: create-pr
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.vars.outputs.branch_name }}
+          base: main
+          title: "🚀 Deploy: Build ${{ steps.vars.outputs.short_sha }}"
+          body: |
+            ## 🐾 PawLenx Deployment
+
+            ### Build Summary
+            | Detail | Value |
+            |--------|-------|
+            | **Commit** | `${{ github.sha }}` |
+            | **Author** | @${{ github.actor }} |
+            | **Docker Image** | `${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.short_sha }}` |
+            | **Workflow** | [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |
+
+            ### ✅ Checks Passed
+            - [x] Docker image builds successfully
+            - [x] Container healthcheck passes
+            - [x] Main page loads (HTTP 200)
+            - [x] Page content verified ("PawLenx" found)
+            - [x] Static assets (CSS/JS) accessible
+            - [x] Docker image pushed to GHCR
+
+            ### 🐳 Run Locally
+            ```bash
+            docker pull ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.short_sha }}
+            docker run -p 8080:80 ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.short_sha }}
+            ```
+
+            ---
+            > **Approve and merge** this PR to deploy the changes.
+          labels: |
+            deployment
+            automated
+          reviewers: ${{ github.actor }}
+          draft: false
+
+  # ─────────────────────────────────────────────
+  # Job 3: Auto-merge when PR is approved
+  # ─────────────────────────────────────────────
+  auto-merge:
+    name: 🔀 Enable Auto-Merge
+    runs-on: ubuntu-latest
+    needs: create-pr
+    if: success()
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔄 Enable auto-merge on deploy PRs
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ needs.create-pr.outputs.pull-request-number }}
+          merge-method: squash
+        continue-on-error: true
