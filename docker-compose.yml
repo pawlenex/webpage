@@ -29,6 +29,10 @@ services:
       dockerfile: Dockerfile
     container_name: pawlenx-backend
     restart: unless-stopped
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_OWNER=pawlenex
+      - GITHUB_REPO=webpage
     volumes:
       - applications-data:/app/applications
     healthcheck:

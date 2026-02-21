@@ -1,6 +1,7 @@
 // ============================================================
 // PawLenx — Backend API Server
 // Receives job application PDFs and stores them
+// Pushes PDFs to GitHub repo (pawlenex/webpage)
 // ============================================================
 
 const express = require('express');
@@ -8,9 +9,75 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// ─── GitHub config ───
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
+const GITHUB_OWNER = process.env.GITHUB_OWNER || 'pawlenex';
+const GITHUB_REPO = process.env.GITHUB_REPO || 'webpage';
+const GITHUB_BRANCH = process.env.GITHUB_BRANCH || 'main';
+
+/**
+ * Upload a file to GitHub using the Contents API
+ * PUT /repos/{owner}/{repo}/contents/{path}
+ */
+function uploadToGitHub(filePath, fileName) {
+  return new Promise((resolve, reject) => {
+    if (!GITHUB_TOKEN) {
+      console.warn('⚠️  GITHUB_TOKEN not set — skipping GitHub upload');
+      return resolve({ skipped: true });
+    }
+
+    const fileContent = fs.readFileSync(filePath);
+    const base64Content = fileContent.toString('base64');
+    const githubPath = `applications/${fileName}`;
+
+    const body = JSON.stringify({
+      message: `📄 New application: ${fileName}`,
+      content: base64Content,
+      branch: GITHUB_BRANCH
+    });
+
+    const options = {
+      hostname: 'api.github.com',
+      path: `/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodeURIComponent(githubPath)}`,
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+        'User-Agent': 'PawLenx-Backend/1.0',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        if (res.statusCode === 201 || res.statusCode === 200) {
+          console.log(`✅ Uploaded to GitHub: ${githubPath}`);
+          resolve(JSON.parse(data));
+        } else {
+          console.error(`❌ GitHub upload failed (${res.statusCode}): ${data}`);
+          reject(new Error(`GitHub API returned ${res.statusCode}`));
+        }
+      });
+    });
+
+    req.on('error', (err) => {
+      console.error('❌ GitHub upload error:', err.message);
+      reject(err);
+    });
+
+    req.write(body);
+    req.end();
+  });
+}
 
 // ─── Ensure applications folder exists ───
 const APPLICATIONS_DIR = path.join(__dirname, 'applications');
@@ -67,7 +134,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Submit application (receive PDF)
-app.post('/api/applications/submit', upload.single('application'), (req, res) => {
+app.post('/api/applications/submit', upload.single('application'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No PDF file received' });
@@ -85,6 +152,17 @@ app.post('/api/applications/submit', upload.single('application'), (req, res) =>
     console.log(`   Saved to:  ${req.file.path}`);
     console.log('─────────────────────────────────────────');
 
+    // Upload PDF to GitHub repo
+    let githubResult = null;
+    try {
+      githubResult = await uploadToGitHub(req.file.path, req.file.filename);
+      if (githubResult.skipped) {
+        console.log('⚠️  GitHub upload skipped (no token configured)');
+      }
+    } catch (ghErr) {
+      console.error('⚠️  GitHub upload failed, but local copy saved:', ghErr.message);
+    }
+
     res.json({
       success: true,
       message: 'Application received successfully',
@@ -92,7 +170,8 @@ app.post('/api/applications/submit', upload.single('application'), (req, res) =>
         fileName: req.file.filename,
         applicantName,
         jobTitle,
-        receivedAt: new Date().toISOString()
+        receivedAt: new Date().toISOString(),
+        githubUploaded: githubResult && !githubResult.skipped ? true : false
       }
     });
   } catch (err) {
