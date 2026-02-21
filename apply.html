@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Apply to join PawLenx — submit your application for open positions.">
+  <title>Apply — PawLenx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/subpage.css">
+  <link rel="stylesheet" href="css/careers.css">
+  <link rel="icon" type="image/png" href="static/Happy pets in a circular arrangement.png">
+  <!-- jsPDF for client-side PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <header class="main-header" id="mainHeader">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo" aria-label="PawLenx Home">
+          <img class="logo-icon" src="static/Happy pets in a circular arrangement.png" alt="PawLenx Logo" width="44" height="44">
+          <span class="logo-text">PawLenx</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li class="nav-item has-dropdown">
+            <a href="#" class="nav-link">Our Services <svg class="chevron" width="12" height="12" viewBox="0 0 12 12"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+            <div class="dropdown-menu">
+              <div class="dropdown-content">
+                <div class="dropdown-section">
+                  <h4>Companionship</h4>
+                  <a href="pet-matching.html">Pet Matching</a>
+                  <a href="breed-compatibility.html">Breed Compatibility</a>
+                  <a href="family-pet-advisor.html">Family Pet Advisor</a>
+                </div>
+                <div class="dropdown-section">
+                  <h4>Nutrition</h4>
+                  <a href="diet-plans.html">Diet Plans</a>
+                  <a href="supplement-guide.html">Supplement Guide</a>
+                  <a href="allergy-solutions.html">Allergy Solutions</a>
+                </div>
+                <div class="dropdown-section">
+                  <h4>AI Solutions</h4>
+                  <a href="health-scanner.html">Health Scanner</a>
+                  <a href="behavior-analysis.html">Behavior Analysis</a>
+                  <a href="smart-monitoring.html">Smart Monitoring</a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item"><a href="index.html#companionship" class="nav-link">Companionship</a></li>
+          <li class="nav-item"><a href="index.html#nutrition" class="nav-link">Nutrition</a></li>
+          <li class="nav-item"><a href="index.html#ai-section" class="nav-link">Pet AI</a></li>
+          <li class="nav-item"><a href="careers.html" class="nav-link active">Careers</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a href="#" class="btn btn-text">Log In</a>
+          <a href="#" class="btn btn-primary">Sign Up</a>
+        </div>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="subpage-hero" style="min-height: 360px;">
+    <div class="subpage-hero-bg">
+      <img src="static/A peaceful moment with pets.png" alt="Join the PawLenx team" loading="eager">
+    </div>
+    <div class="subpage-hero-overlay"></div>
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="careers.html">Careers</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>Apply</span>
+      </nav>
+      <h1 class="subpage-title">Apply for: <span class="highlight" id="heroJobTitle">Position</span></h1>
+      <p class="subpage-subtitle" id="heroDept">Department</p>
+    </div>
+  </section>
+
+  <!-- ========== APPLICATION FORM ========== -->
+  <section class="subpage-section">
+    <div class="container">
+      <div class="apply-wrapper">
+        <div class="apply-sidebar">
+          <h3>Application Tips</h3>
+          <ul>
+            <li>✅ Double-check all fields before submitting</li>
+            <li>📄 Your responses will be converted to a PDF application</li>
+            <li>⏱️ The form takes about 10 minutes to complete</li>
+            <li>📧 You'll receive a confirmation after submission</li>
+          </ul>
+          <div class="apply-sidebar-card">
+            <h4>Questions?</h4>
+            <p>Reach out to our talent team at <strong>careers@pawlenx.com</strong></p>
+          </div>
+        </div>
+
+        <form class="apply-form" id="applicationForm" novalidate>
+          <input type="hidden" id="jobTitle" value="">
+          <input type="hidden" id="department" value="">
+
+          <!-- Personal Information -->
+          <div class="form-section">
+            <h3 class="form-section-title">Personal Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name <span class="required">*</span></label>
+                <input type="text" id="firstName" name="firstName" required placeholder="John">
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name <span class="required">*</span></label>
+                <input type="text" id="lastName" name="lastName" required placeholder="Doe">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">Email Address <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required placeholder="john.doe@email.com">
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" id="phone" name="phone" required placeholder="+1 (555) 123-4567">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="location">Current Location <span class="required">*</span></label>
+              <input type="text" id="location" name="location" required placeholder="City, State/Country">
+            </div>
+          </div>
+
+          <!-- Professional Details -->
+          <div class="form-section">
+            <h3 class="form-section-title">Professional Details</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="currentRole">Current Job Title</label>
+                <input type="text" id="currentRole" name="currentRole" placeholder="e.g. Software Engineer">
+              </div>
+              <div class="form-group">
+                <label for="currentCompany">Current Company</label>
+                <input type="text" id="currentCompany" name="currentCompany" placeholder="e.g. Tech Corp">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="experience">Years of Experience <span class="required">*</span></label>
+                <select id="experience" name="experience" required>
+                  <option value="">Select...</option>
+                  <option value="0-1">0 – 1 years</option>
+                  <option value="1-3">1 – 3 years</option>
+                  <option value="3-5">3 – 5 years</option>
+                  <option value="5-10">5 – 10 years</option>
+                  <option value="10+">10+ years</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="startDate">Earliest Start Date <span class="required">*</span></label>
+                <input type="date" id="startDate" name="startDate" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="linkedin">LinkedIn Profile URL</label>
+              <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+            </div>
+            <div class="form-group">
+              <label for="portfolio">Portfolio / GitHub URL</label>
+              <input type="url" id="portfolio" name="portfolio" placeholder="https://github.com/yourprofile">
+            </div>
+          </div>
+
+          <!-- Skills & Qualifications -->
+          <div class="form-section">
+            <h3 class="form-section-title">Skills & Qualifications</h3>
+            <div class="form-group">
+              <label for="skills">Key Skills <span class="required">*</span></label>
+              <input type="text" id="skills" name="skills" required placeholder="e.g. Python, Machine Learning, React, Docker">
+            </div>
+            <div class="form-group">
+              <label for="education">Highest Education Level <span class="required">*</span></label>
+              <select id="education" name="education" required>
+                <option value="">Select...</option>
+                <option value="High School">High School</option>
+                <option value="Associate's Degree">Associate's Degree</option>
+                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                <option value="Master's Degree">Master's Degree</option>
+                <option value="PhD">PhD</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Cover Letter / Why PawLenx -->
+          <div class="form-section">
+            <h3 class="form-section-title">Why PawLenx?</h3>
+            <div class="form-group">
+              <label for="whyJoin">Why do you want to join PawLenx? <span class="required">*</span></label>
+              <textarea id="whyJoin" name="whyJoin" rows="4" required placeholder="Tell us why you're excited about PawLenx and this role..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="contribution">What unique value would you bring to the team? <span class="required">*</span></label>
+              <textarea id="contribution" name="contribution" rows="4" required placeholder="Describe your strengths and how they align with this position..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="petExperience">Do you have experience with pets? Tell us about it!</label>
+              <textarea id="petExperience" name="petExperience" rows="3" placeholder="We love pet people! Share your pet story..."></textarea>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="form-actions">
+            <p class="form-disclaimer">By submitting, your application will be converted to a PDF and sent to our hiring team. Fields marked <span class="required">*</span> are required.</p>
+            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+              <span class="btn-text">Submit Application</span>
+              <span class="btn-loading" style="display:none;">
+                <svg class="spinner" width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="30 70" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" dur="1s" from="0 12 12" to="360 12 12" repeatCount="indefinite"/></circle></svg>
+                Submitting...
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SUCCESS MODAL ========== -->
+  <div class="modal-overlay" id="successModal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-icon">🎉</div>
+      <h2>Application Submitted!</h2>
+      <p>Thank you, <strong id="modalName"></strong>. Your application for <strong id="modalJob"></strong> has been received.</p>
+      <p class="modal-sub">A PDF copy of your application has been generated and sent to our hiring team. We'll review it and get back to you within 5 business days.</p>
+      <a href="careers.html" class="btn btn-primary">Back to Careers</a>
+    </div>
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img class="logo-icon" src="static/Happy pets in a circular arrangement.png" alt="PawLenx Logo" width="40" height="40">
+            <span class="logo-text">PawLenx</span>
+          </a>
+          <p class="footer-desc">AI-powered pet care for the modern pet parent.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="pet-matching.html">Pet Matching</a></li>
+            <li><a href="diet-plans.html">Diet Plans</a></li>
+            <li><a href="health-scanner.html">AI Health Scanner</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="index.html#about">About Us</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 PawLenx, Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // ─── Parse URL params for job info ───
+    const params = new URLSearchParams(window.location.search);
+    const jobTitle = params.get('job') || 'General Application';
+    const department = params.get('dept') || 'Open';
+
+    document.getElementById('heroJobTitle').textContent = jobTitle;
+    document.getElementById('heroDept').textContent = department + ' Department';
+    document.getElementById('jobTitle').value = jobTitle;
+    document.getElementById('department').value = department;
+    document.title = `Apply: ${jobTitle} — PawLenx`;
+
+    // ─── Form submission → PDF → Upload ───
+    document.getElementById('applicationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validate required fields
+      const form = e.target;
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnLoading = submitBtn.querySelector('.btn-loading');
+      submitBtn.disabled = true;
+      btnText.style.display = 'none';
+      btnLoading.style.display = 'inline-flex';
+
+      try {
+        // Gather form data
+        const data = {
+          jobTitle: document.getElementById('jobTitle').value,
+          department: document.getElementById('department').value,
+          firstName: document.getElementById('firstName').value.trim(),
+          lastName: document.getElementById('lastName').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          location: document.getElementById('location').value.trim(),
+          currentRole: document.getElementById('currentRole').value.trim(),
+          currentCompany: document.getElementById('currentCompany').value.trim(),
+          experience: document.getElementById('experience').value,
+          startDate: document.getElementById('startDate').value,
+          linkedin: document.getElementById('linkedin').value.trim(),
+          portfolio: document.getElementById('portfolio').value.trim(),
+          skills: document.getElementById('skills').value.trim(),
+          education: document.getElementById('education').value,
+          whyJoin: document.getElementById('whyJoin').value.trim(),
+          contribution: document.getElementById('contribution').value.trim(),
+          petExperience: document.getElementById('petExperience').value.trim(),
+        };
+
+        // ─── Generate PDF with jsPDF ───
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const margin = 20;
+        const contentWidth = pageWidth - margin * 2;
+        let y = 20;
+
+        // Helper to add wrapped text
+        function addWrappedText(text, x, startY, maxWidth, lineHeight) {
+          const lines = doc.splitTextToSize(text, maxWidth);
+          lines.forEach(line => {
+            if (startY > 270) {
+              doc.addPage();
+              startY = 20;
+            }
+            doc.text(line, x, startY);
+            startY += lineHeight;
+          });
+          return startY;
+        }
+
+        // Header
+        doc.setFillColor(56, 189, 248); // #38BDF8
+        doc.rect(0, 0, pageWidth, 40, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(22);
+        doc.setFont('helvetica', 'bold');
+        doc.text('PawLenx', margin, 18);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Job Application', margin, 28);
+        doc.setFontSize(10);
+        doc.text(`Submitted: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, margin, 36);
+
+        y = 52;
+
+        // Position Applied For
+        doc.setTextColor(56, 189, 248);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Position Applied For', margin, y);
+        y += 8;
+        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Role: ${data.jobTitle}`, margin, y); y += 6;
+        doc.text(`Department: ${data.department}`, margin, y); y += 12;
+
+        // Divider
+        doc.setDrawColor(220, 220, 220);
+        doc.line(margin, y, pageWidth - margin, y); y += 10;
+
+        // Personal Information
+        doc.setTextColor(56, 189, 248);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Personal Information', margin, y); y += 8;
+        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Name: ${data.firstName} ${data.lastName}`, margin, y); y += 6;
+        doc.text(`Email: ${data.email}`, margin, y); y += 6;
+        doc.text(`Phone: ${data.phone}`, margin, y); y += 6;
+        doc.text(`Location: ${data.location}`, margin, y); y += 12;
+
+        // Divider
+        doc.line(margin, y, pageWidth - margin, y); y += 10;
+
+        // Professional Details
+        doc.setTextColor(56, 189, 248);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Professional Details', margin, y); y += 8;
+        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        if (data.currentRole) { doc.text(`Current Role: ${data.currentRole}`, margin, y); y += 6; }
+        if (data.currentCompany) { doc.text(`Company: ${data.currentCompany}`, margin, y); y += 6; }
+        doc.text(`Experience: ${data.experience} years`, margin, y); y += 6;
+        doc.text(`Earliest Start Date: ${data.startDate}`, margin, y); y += 6;
+        if (data.linkedin) { doc.text(`LinkedIn: ${data.linkedin}`, margin, y); y += 6; }
+        if (data.portfolio) { doc.text(`Portfolio: ${data.portfolio}`, margin, y); y += 6; }
+        doc.text(`Education: ${data.education}`, margin, y); y += 6;
+        doc.text(`Key Skills: ${data.skills}`, margin, y); y += 12;
+
+        // Divider
+        doc.line(margin, y, pageWidth - margin, y); y += 10;
+
+        // Why PawLenx
+        doc.setTextColor(56, 189, 248);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Why PawLenx?', margin, y); y += 8;
+        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        y = addWrappedText(data.whyJoin, margin, y, contentWidth, 6);
+        y += 10;
+
+        // Contribution
+        doc.setTextColor(56, 189, 248);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Unique Value / Contribution', margin, y); y += 8;
+        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        y = addWrappedText(data.contribution, margin, y, contentWidth, 6);
+        y += 10;
+
+        // Pet Experience (optional)
+        if (data.petExperience) {
+          if (y > 250) { doc.addPage(); y = 20; }
+          doc.setTextColor(56, 189, 248);
+          doc.setFontSize(14);
+          doc.setFont('helvetica', 'bold');
+          doc.text('Pet Experience', margin, y); y += 8;
+          doc.setTextColor(50, 50, 50);
+          doc.setFontSize(11);
+          doc.setFont('helvetica', 'normal');
+          y = addWrappedText(data.petExperience, margin, y, contentWidth, 6);
+        }
+
+        // Footer on last page
+        const lastPage = doc.internal.getNumberOfPages();
+        doc.setPage(lastPage);
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text('This application was generated by PawLenx Careers Portal.', margin, 285);
+        doc.text(`Document: ${data.firstName}_${data.lastName}_Application.pdf`, pageWidth - margin - 70, 285);
+
+        // Convert PDF to blob
+        const pdfFileName = `${data.firstName}_${data.lastName}_Application.pdf`;
+        const pdfBlob = doc.output('blob');
+
+        // Upload PDF to backend
+        const formData = new FormData();
+        formData.append('application', pdfBlob, pdfFileName);
+        formData.append('applicantName', `${data.firstName} ${data.lastName}`);
+        formData.append('jobTitle', data.jobTitle);
+        formData.append('email', data.email);
+
+        const response = await fetch('/api/applications/submit', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Application submitted:', result);
+
+        // Show success modal
+        document.getElementById('modalName').textContent = `${data.firstName} ${data.lastName}`;
+        document.getElementById('modalJob').textContent = data.jobTitle;
+        document.getElementById('successModal').style.display = 'flex';
+
+      } catch (err) {
+        console.error('Submission error:', err);
+        alert('There was an error submitting your application. Please try again.');
+      } finally {
+        submitBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnLoading.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

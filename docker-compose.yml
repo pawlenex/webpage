@@ -10,6 +10,9 @@ services:
     ports:
       - "8080:80"
     restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/healthz"]
       interval: 30s
@@ -19,3 +22,25 @@ services:
     labels:
       - "app=pawlenx"
       - "environment=production"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pawlenx-backend
+    restart: unless-stopped
+    volumes:
+      - applications-data:/app/applications
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3001/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    labels:
+      - "app=pawlenx-backend"
+      - "environment=production"
+
+volumes:
+  applications-data:
+    driver: local

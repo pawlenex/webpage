@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Join the PawLenx team — explore open positions in pet care, AI, engineering, and more.">
+  <title>Careers — PawLenx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/subpage.css">
+  <link rel="stylesheet" href="css/careers.css">
+  <link rel="icon" type="image/png" href="static/Happy pets in a circular arrangement.png">
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <header class="main-header" id="mainHeader">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo" aria-label="PawLenx Home">
+          <img class="logo-icon" src="static/Happy pets in a circular arrangement.png" alt="PawLenx Logo" width="44" height="44">
+          <span class="logo-text">PawLenx</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li class="nav-item has-dropdown">
+            <a href="#" class="nav-link">Our Services <svg class="chevron" width="12" height="12" viewBox="0 0 12 12"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+            <div class="dropdown-menu">
+              <div class="dropdown-content">
+                <div class="dropdown-section">
+                  <h4>Companionship</h4>
+                  <a href="pet-matching.html">Pet Matching</a>
+                  <a href="breed-compatibility.html">Breed Compatibility</a>
+                  <a href="family-pet-advisor.html">Family Pet Advisor</a>
+                </div>
+                <div class="dropdown-section">
+                  <h4>Nutrition</h4>
+                  <a href="diet-plans.html">Diet Plans</a>
+                  <a href="supplement-guide.html">Supplement Guide</a>
+                  <a href="allergy-solutions.html">Allergy Solutions</a>
+                </div>
+                <div class="dropdown-section">
+                  <h4>AI Solutions</h4>
+                  <a href="health-scanner.html">Health Scanner</a>
+                  <a href="behavior-analysis.html">Behavior Analysis</a>
+                  <a href="smart-monitoring.html">Smart Monitoring</a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item"><a href="index.html#companionship" class="nav-link">Companionship</a></li>
+          <li class="nav-item"><a href="index.html#nutrition" class="nav-link">Nutrition</a></li>
+          <li class="nav-item"><a href="index.html#ai-section" class="nav-link">Pet AI</a></li>
+          <li class="nav-item"><a href="careers.html" class="nav-link active">Careers</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a href="#" class="btn btn-text">Log In</a>
+          <a href="#" class="btn btn-primary">Sign Up</a>
+        </div>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="subpage-hero">
+    <div class="subpage-hero-bg">
+      <img src="static/Happy moments in the park.png" alt="PawLenx team working with pets" loading="eager">
+    </div>
+    <div class="subpage-hero-overlay"></div>
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>Careers</span>
+      </nav>
+      <h1 class="subpage-title">Join the <span class="highlight">PawLenx</span> Team</h1>
+      <p class="subpage-subtitle">Help us build the future of pet care. We're looking for passionate people who love animals and technology.</p>
+    </div>
+  </section>
+
+  <!-- ========== WHY WORK WITH US ========== -->
+  <section class="subpage-section">
+    <div class="container">
+      <span class="section-badge">Why PawLenx</span>
+      <h2 class="section-title">More Than Just a Job</h2>
+      <p class="section-desc">At PawLenx, every team member makes a real difference in the lives of pets and their families.</p>
+      <div class="card-grid card-grid--3">
+        <div class="info-card">
+          <div class="info-card-icon">🐾</div>
+          <h3>Pet-Friendly Office</h3>
+          <p>Bring your pet to work every day. We have dedicated pet spaces, treats, and play areas throughout our offices.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🌍</div>
+          <h3>Remote-First Culture</h3>
+          <p>Work from anywhere in the world. We believe great talent isn't limited by geography.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🚀</div>
+          <h3>Growth & Learning</h3>
+          <p>$5,000 annual learning budget, conference sponsorships, and internal mentorship programs to accelerate your career.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== OPEN POSITIONS ========== -->
+  <section class="subpage-section subpage-section--alt" id="openings">
+    <div class="container">
+      <span class="section-badge section-badge--primary">Open Positions</span>
+      <h2 class="section-title">Find Your Role</h2>
+      <p class="section-desc">Explore our current openings and find the perfect fit for your skills and passion.</p>
+
+      <!-- Filter Tabs -->
+      <div class="job-filters">
+        <button class="job-filter-btn active" data-filter="all">All Roles</button>
+        <button class="job-filter-btn" data-filter="engineering">Engineering</button>
+        <button class="job-filter-btn" data-filter="ai">AI & Data</button>
+        <button class="job-filter-btn" data-filter="veterinary">Veterinary</button>
+        <button class="job-filter-btn" data-filter="marketing">Marketing</button>
+        <button class="job-filter-btn" data-filter="operations">Operations</button>
+      </div>
+
+      <!-- Job Listings -->
+      <div class="job-list" id="jobList">
+
+        <div class="job-card" data-category="engineering">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">Senior Full-Stack Engineer</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">Engineering</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">Remote</span>
+              </div>
+            </div>
+            <a href="apply.html?job=Senior%20Full-Stack%20Engineer&dept=Engineering" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Build scalable web applications that power our pet matching platform. Work with React, Node.js, and cloud infrastructure to deliver features used by millions of pet parents.</p>
+          <div class="job-details">
+            <span>💰 $140K – $180K</span>
+            <span>📍 Remote (US/EU)</span>
+            <span>🕐 Posted 2 days ago</span>
+          </div>
+        </div>
+
+        <div class="job-card" data-category="engineering">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">Mobile Developer (iOS/Android)</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">Engineering</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">Hybrid</span>
+              </div>
+            </div>
+            <a href="apply.html?job=Mobile%20Developer%20(iOS/Android)&dept=Engineering" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Design and develop our mobile apps using React Native and Swift/Kotlin. Create smooth experiences for pet health tracking, monitoring dashboards, and smart notifications.</p>
+          <div class="job-details">
+            <span>💰 $130K – $165K</span>
+            <span>📍 San Francisco / Hybrid</span>
+            <span>🕐 Posted 5 days ago</span>
+          </div>
+        </div>
+
+        <div class="job-card" data-category="ai">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">Machine Learning Engineer</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">AI & Data</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">Remote</span>
+              </div>
+            </div>
+            <a href="apply.html?job=Machine%20Learning%20Engineer&dept=AI%20%26%20Data" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Train and deploy ML models for pet health scanning, behavior analysis, and breed compatibility predictions. Work with TensorFlow, PyTorch, and our proprietary pet health datasets.</p>
+          <div class="job-details">
+            <span>💰 $155K – $200K</span>
+            <span>📍 Remote (Global)</span>
+            <span>🕐 Posted 1 day ago</span>
+          </div>
+        </div>
+
+        <div class="job-card" data-category="ai">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">Data Scientist — Pet Nutrition</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">AI & Data</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">Remote</span>
+              </div>
+            </div>
+            <a href="apply.html?job=Data%20Scientist%20—%20Pet%20Nutrition&dept=AI%20%26%20Data" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Analyze nutritional data to improve our diet planning algorithms. Build models for allergy detection and supplement recommendations based on breed, age, and health history.</p>
+          <div class="job-details">
+            <span>💰 $130K – $170K</span>
+            <span>📍 Remote (US)</span>
+            <span>🕐 Posted 3 days ago</span>
+          </div>
+        </div>
+
+        <div class="job-card" data-category="veterinary">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">Veterinary Content Specialist</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">Veterinary</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">Remote</span>
+              </div>
+            </div>
+            <a href="apply.html?job=Veterinary%20Content%20Specialist&dept=Veterinary" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Create expert-reviewed content about pet health, nutrition, and behavior. Collaborate with our AI team to validate health scanner results and ensure medical accuracy.</p>
+          <div class="job-details">
+            <span>💰 $90K – $120K</span>
+            <span>📍 Remote (US/UK)</span>
+            <span>🕐 Posted 1 week ago</span>
+          </div>
+        </div>
+
+        <div class="job-card" data-category="veterinary">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">Chief Veterinary Officer</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">Veterinary</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">On-site</span>
+              </div>
+            </div>
+            <a href="apply.html?job=Chief%20Veterinary%20Officer&dept=Veterinary" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Lead our veterinary advisory team. Shape product strategy for health-related features, oversee clinical accuracy, and build partnerships with veterinary institutions worldwide.</p>
+          <div class="job-details">
+            <span>💰 $200K – $260K</span>
+            <span>📍 San Francisco, CA</span>
+            <span>🕐 Posted 4 days ago</span>
+          </div>
+        </div>
+
+        <div class="job-card" data-category="marketing">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">Growth Marketing Manager</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">Marketing</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">Remote</span>
+              </div>
+            </div>
+            <a href="apply.html?job=Growth%20Marketing%20Manager&dept=Marketing" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Drive user acquisition and retention through SEO, paid ads, content marketing, and community partnerships. Own our growth funnel from awareness to conversion.</p>
+          <div class="job-details">
+            <span>💰 $110K – $145K</span>
+            <span>📍 Remote (US)</span>
+            <span>🕐 Posted 6 days ago</span>
+          </div>
+        </div>
+
+        <div class="job-card" data-category="operations">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">DevOps / Platform Engineer</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">Operations</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">Remote</span>
+              </div>
+            </div>
+            <a href="apply.html?job=DevOps%20/%20Platform%20Engineer&dept=Operations" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Build and maintain our cloud infrastructure on AWS/GCP. Manage CI/CD pipelines, Kubernetes clusters, monitoring, and ensure 99.99% uptime for our pet care platform.</p>
+          <div class="job-details">
+            <span>💰 $145K – $185K</span>
+            <span>📍 Remote (Global)</span>
+            <span>🕐 Posted 3 days ago</span>
+          </div>
+        </div>
+
+        <div class="job-card" data-category="operations">
+          <div class="job-card-header">
+            <div>
+              <h3 class="job-title">Customer Success Lead</h3>
+              <div class="job-meta">
+                <span class="job-tag job-tag--dept">Operations</span>
+                <span class="job-tag job-tag--type">Full-time</span>
+                <span class="job-tag job-tag--loc">Hybrid</span>
+              </div>
+            </div>
+            <a href="apply.html?job=Customer%20Success%20Lead&dept=Operations" class="btn btn-primary btn-sm">Apply Now</a>
+          </div>
+          <p class="job-desc">Champion our users' experience from onboarding to retention. Build a world-class support team and create processes that delight pet parents at every touchpoint.</p>
+          <div class="job-details">
+            <span>💰 $95K – $125K</span>
+            <span>📍 Austin, TX / Hybrid</span>
+            <span>🕐 Posted 1 week ago</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="subpage-cta">
+    <div class="container">
+      <h2>Don't See Your Role?</h2>
+      <p>We're always looking for talented people. Send us your resume and tell us how you'd make an impact.</p>
+      <a href="apply.html?job=General%20Application&dept=Open" class="btn">Submit General Application</a>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img class="logo-icon" src="static/Happy pets in a circular arrangement.png" alt="PawLenx Logo" width="40" height="40">
+            <span class="logo-text">PawLenx</span>
+          </a>
+          <p class="footer-desc">AI-powered pet care for the modern pet parent.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="pet-matching.html">Pet Matching</a></li>
+            <li><a href="diet-plans.html">Diet Plans</a></li>
+            <li><a href="health-scanner.html">AI Health Scanner</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="index.html#about">About Us</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 PawLenx, Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Job filter functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const filterBtns = document.querySelectorAll('.job-filter-btn');
+      const jobCards = document.querySelectorAll('.job-card');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.dataset.filter;
+
+          jobCards.forEach(card => {
+            if (filter === 'all' || card.dataset.category === filter) {
+              card.style.display = '';
+              card.style.animation = 'fadeInUp 0.4s ease forwards';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

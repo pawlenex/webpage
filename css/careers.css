@@ -1,0 +1,407 @@
+/* ============================================================
+   PawLenx — Careers & Application Styles
+   ============================================================ */
+
+/* ─── Job Filters ─── */
+.job-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.job-filter-btn {
+  padding: 8px 20px;
+  border: 2px solid var(--color-border, #E5E7EB);
+  border-radius: 50px;
+  background: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.job-filter-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.job-filter-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+/* ─── Job Cards ─── */
+.job-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.job-card {
+  background: #fff;
+  border: 1px solid var(--color-border, #E5E7EB);
+  border-radius: 16px;
+  padding: 28px 32px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.job-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+.job-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.job-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 8px;
+}
+
+.job-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.job-tag {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.job-tag--dept {
+  background: #E0F2FE;
+  color: #0284C7;
+}
+
+.job-tag--type {
+  background: #DCFCE7;
+  color: #16A34A;
+}
+
+.job-tag--loc {
+  background: #F3E8FF;
+  color: #7C3AED;
+}
+
+.job-desc {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.job-details {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
+.btn-sm {
+  padding: 8px 24px !important;
+  font-size: 0.85rem !important;
+  white-space: nowrap;
+}
+
+/* ─── Apply Form Layout ─── */
+.apply-wrapper {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.apply-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.apply-sidebar h3 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 16px;
+}
+
+.apply-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+
+.apply-sidebar ul li {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 2.2;
+}
+
+.apply-sidebar-card {
+  background: var(--color-primary-light, #E0F2FE);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.apply-sidebar-card h4 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 8px;
+}
+
+.apply-sidebar-card p {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+/* ─── Form Sections ─── */
+.apply-form {
+  max-width: 720px;
+}
+
+.form-section {
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--color-border, #E5E7EB);
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
+.form-section-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--color-primary);
+  display: inline-block;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 6px;
+}
+
+.required {
+  color: #EF4444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--color-border, #E5E7EB);
+  border-radius: 10px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--color-dark);
+  background: #fff;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #A0AEC0;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+/* ─── Form Actions ─── */
+.form-actions {
+  margin-top: 16px;
+}
+
+.form-disclaimer {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.btn-lg {
+  padding: 16px 48px !important;
+  font-size: 1.05rem !important;
+}
+
+.btn-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Success Modal ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 20px;
+  padding: 48px 40px;
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  animation: modalIn 0.4s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-icon {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+}
+
+.modal-content h2 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--color-dark);
+  margin-bottom: 12px;
+}
+
+.modal-content p {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.modal-sub {
+  font-size: 0.9rem !important;
+  color: var(--color-text-light) !important;
+  margin-bottom: 24px !important;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .apply-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .apply-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .job-card-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .job-details {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .job-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .job-filters {
+    gap: 6px;
+  }
+
+  .job-filter-btn {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+
+  .modal-content {
+    padding: 32px 24px;
+  }
+}
