@@ -19,6 +19,27 @@
     initCountUp();
     initScrollAnimations();
     initSmoothScroll();
+    updateAuthButtons();
+  }
+
+  // ============================================================
+  // AUTH BUTTONS — Update based on login status
+  // ============================================================
+  function updateAuthButtons() {
+    const token = localStorage.getItem('pawlenxToken');
+    const user = localStorage.getItem('pawlenxUser');
+    const navActions = document.querySelectorAll('.nav-actions');
+    const mobileActions = document.querySelectorAll('.mobile-actions');
+
+    if (!token) return;
+
+    const authHTML = `
+      <a href="dashboard.html" class="btn btn-text">Hi, ${user}</a>
+      <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+    `;
+
+    navActions.forEach(el => el.innerHTML = authHTML);
+    mobileActions.forEach(el => el.innerHTML = authHTML);
   }
 
   // ============================================================

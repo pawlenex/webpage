@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard | PawLenx — Enterprise Pet Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/subpage.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="icon" type="image/png" href="static/Happy pets in a circular arrangement.png">
+</head>
+<body class="dashboard-body">
+
+    <!-- ========== TOP NAV ========== -->
+    <header class="dash-topbar">
+        <div class="dash-topbar-inner">
+            <a href="index.html" class="logo">
+                <img class="logo-icon" src="static/Happy pets in a circular arrangement.png" alt="PawLenx Logo" width="36" height="36">
+                <span class="logo-text">PawLenx<span class="logo-badge">Space</span></span>
+            </a>
+            <div class="dash-topbar-actions">
+                <span class="dash-user-name" id="topbar-user"></span>
+                <button class="dash-logout-btn" onclick="PawLenx.logout()">Log Out</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dash-layout">
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="dash-sidebar" id="dash-sidebar">
+            <nav class="dash-nav">
+                <div class="dash-nav-item active" data-panel="overview">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    Overview
+                </div>
+                <div class="dash-nav-item" data-panel="pets">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21c-4-4-8-6.5-8-10a4 4 0 018 0 4 4 0 018 0c0 3.5-4 6-8 10z"/></svg>
+                    My Pets
+                </div>
+                <div class="dash-nav-item" data-panel="health">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    AI Health Scanner
+                </div>
+                <div class="dash-nav-item" data-panel="nutrition">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/></svg>
+                    Nutrition Hub
+                </div>
+                <div class="dash-nav-item" data-panel="activity">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Activity Log
+                </div>
+                <div class="dash-nav-item" data-panel="settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                    Settings
+                </div>
+            </nav>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="dash-main">
+
+            <!-- ===== OVERVIEW PANEL ===== -->
+            <section class="dash-panel active" id="panel-overview">
+                <div class="dash-welcome-banner">
+                    <div>
+                        <h1 id="welcome-text">Welcome back!</h1>
+                        <p>Here's a snapshot of your PawLenx world.</p>
+                    </div>
+                    <button class="dash-cta-btn" onclick="switchPanel('pets')">+ Register New Pet</button>
+                </div>
+
+                <div class="dash-stats-grid">
+                    <div class="dash-stat-card">
+                        <div class="dash-stat-icon" style="background:#e3f2fd;">🐾</div>
+                        <div class="dash-stat-info">
+                            <span class="dash-stat-number" id="stat-pets">0</span>
+                            <span class="dash-stat-label">Registered Pets</span>
+                        </div>
+                    </div>
+                    <div class="dash-stat-card">
+                        <div class="dash-stat-icon" style="background:#e8f5e9;">🏥</div>
+                        <div class="dash-stat-info">
+                            <span class="dash-stat-number" id="stat-scans">0</span>
+                            <span class="dash-stat-label">Health Scans</span>
+                        </div>
+                    </div>
+                    <div class="dash-stat-card">
+                        <div class="dash-stat-icon" style="background:#fff3e0;">🥗</div>
+                        <div class="dash-stat-info">
+                            <span class="dash-stat-number" id="stat-meals">0</span>
+                            <span class="dash-stat-label">Meals Logged</span>
+                        </div>
+                    </div>
+                    <div class="dash-stat-card">
+                        <div class="dash-stat-icon" style="background:#fce4ec;">📅</div>
+                        <div class="dash-stat-info">
+                            <span class="dash-stat-number" id="stat-activities">0</span>
+                            <span class="dash-stat-label">Activities</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dash-section-header">
+                    <h2>Your Pets</h2>
+                    <a href="#" onclick="switchPanel('pets'); return false;">View All →</a>
+                </div>
+                <div class="pet-grid" id="overview-pet-grid">
+                    <div class="dash-empty-state">Loading...</div>
+                </div>
+
+                <div class="dash-section-header" style="margin-top: 40px;">
+                    <h2>Recent Activity</h2>
+                </div>
+                <div class="dash-activity-feed" id="overview-activity">
+                    <div class="dash-empty-state">No recent activity yet.</div>
+                </div>
+            </section>
+
+            <!-- ===== MY PETS PANEL ===== -->
+            <section class="dash-panel" id="panel-pets">
+                <div class="dash-panel-header">
+                    <h1>My Pets</h1>
+                    <button class="dash-cta-btn" onclick="openModal()">+ Register New Pet</button>
+                </div>
+                <div class="pet-grid" id="pets-grid">
+                    <div class="dash-empty-state">Loading pets...</div>
+                </div>
+            </section>
+
+            <!-- ===== AI HEALTH SCANNER PANEL ===== -->
+            <section class="dash-panel" id="panel-health">
+                <div class="dash-panel-header">
+                    <h1>AI Health Scanner</h1>
+                </div>
+                <div class="dash-two-col">
+                    <div class="dash-card">
+                        <div class="dash-card-icon">🔬</div>
+                        <h3>Quick Symptom Check</h3>
+                        <p>Describe your pet's symptoms and get an instant AI assessment.</p>
+                        <div class="form-group">
+                            <label>Select Pet</label>
+                            <select id="health-pet-select" class="dash-input"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Describe Symptoms</label>
+                            <textarea id="health-symptoms" class="dash-input" rows="4" placeholder="e.g., My dog has been scratching excessively and has red patches on skin..."></textarea>
+                        </div>
+                        <button class="dash-cta-btn" onclick="runHealthScan()" style="width:100%;">Run AI Analysis</button>
+                        <div id="health-result" class="scanner-result" style="display:none;"></div>
+                    </div>
+                    <div class="dash-card">
+                        <div class="dash-card-icon">📋</div>
+                        <h3>Scan History</h3>
+                        <div id="scan-history">
+                            <div class="dash-empty-state">No scans yet. Run your first scan.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== NUTRITION HUB PANEL ===== -->
+            <section class="dash-panel" id="panel-nutrition">
+                <div class="dash-panel-header">
+                    <h1>Nutrition Hub</h1>
+                </div>
+                <div class="dash-two-col">
+                    <div class="dash-card">
+                        <div class="dash-card-icon">🍖</div>
+                        <h3>Log a Meal</h3>
+                        <div class="form-group">
+                            <label>Select Pet</label>
+                            <select id="nutrition-pet-select" class="dash-input"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Meal Type</label>
+                            <select id="meal-type" class="dash-input">
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Dinner">Dinner</option>
+                                <option value="Snack">Snack</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Food</label>
+                            <input type="text" id="meal-food" class="dash-input" placeholder="e.g., Kibble, chicken, rice...">
+                        </div>
+                        <div class="form-group">
+                            <label>Portion (grams)</label>
+                            <input type="number" id="meal-portion" class="dash-input" placeholder="250">
+                        </div>
+                        <button class="dash-cta-btn" onclick="logMeal()" style="width:100%;">Log Meal</button>
+                    </div>
+                    <div class="dash-card">
+                        <div class="dash-card-icon">📊</div>
+                        <h3>Meal History</h3>
+                        <div id="meal-history">
+                            <div class="dash-empty-state">No meals logged yet.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== ACTIVITY LOG PANEL ===== -->
+            <section class="dash-panel" id="panel-activity">
+                <div class="dash-panel-header">
+                    <h1>Activity Log</h1>
+                </div>
+                <div class="dash-two-col">
+                    <div class="dash-card">
+                        <div class="dash-card-icon">🏃</div>
+                        <h3>Log Activity</h3>
+                        <div class="form-group">
+                            <label>Select Pet</label>
+                            <select id="activity-pet-select" class="dash-input"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Activity Type</label>
+                            <select id="activity-type" class="dash-input">
+                                <option value="Walk">Walk</option>
+                                <option value="Run">Run</option>
+                                <option value="Play">Play</option>
+                                <option value="Training">Training</option>
+                                <option value="Grooming">Grooming</option>
+                                <option value="Vet Visit">Vet Visit</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (minutes)</label>
+                            <input type="number" id="activity-duration" class="dash-input" placeholder="30">
+                        </div>
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <textarea id="activity-notes" class="dash-input" rows="2" placeholder="Optional notes..."></textarea>
+                        </div>
+                        <button class="dash-cta-btn" onclick="logActivity()" style="width:100%;">Log Activity</button>
+                    </div>
+                    <div class="dash-card">
+                        <div class="dash-card-icon">📜</div>
+                        <h3>Activity History</h3>
+                        <div id="activity-history">
+                            <div class="dash-empty-state">No activities logged yet.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== SETTINGS PANEL ===== -->
+            <section class="dash-panel" id="panel-settings">
+                <div class="dash-panel-header">
+                    <h1>Settings</h1>
+                </div>
+                <div class="dash-card" style="max-width: 600px;">
+                    <h3>Account Information</h3>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="settings-name" class="dash-input" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="text" id="settings-email" class="dash-input" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Member Since</label>
+                        <input type="text" id="settings-joined" class="dash-input" disabled>
+                    </div>
+                    <hr style="margin: 30px 0; border-color: #eee;">
+                    <h3 style="color: #d93025;">Danger Zone</h3>
+                    <p style="margin-bottom: 15px; color: #666;">This will log you out and clear your local session.</p>
+                    <button class="dash-danger-btn" onclick="PawLenx.logout()">Log Out of All Sessions</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ===== ADD PET MODAL ===== -->
+    <div class="dash-modal" id="petModal">
+        <div class="dash-modal-overlay" onclick="closeModal()"></div>
+        <div class="dash-modal-content">
+            <div class="dash-modal-header">
+                <h2>Register Your Pet</h2>
+                <button class="dash-modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="pet-form">
+                <div class="form-group">
+                    <label>Pet Name</label>
+                    <input type="text" id="petName" class="dash-input" required placeholder="e.g., Buddy">
+                </div>
+                <div class="form-group">
+                    <label>Species</label>
+                    <select id="petType" class="dash-input">
+                        <option value="Dog">Dog</option>
+                        <option value="Cat">Cat</option>
+                        <option value="Bird">Bird</option>
+                        <option value="Fish">Fish</option>
+                        <option value="Rabbit">Rabbit</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Breed</label>
+                    <input type="text" id="petBreed" class="dash-input" required placeholder="e.g., Golden Retriever">
+                </div>
+                <div class="form-group">
+                    <label>Age (Years)</label>
+                    <input type="number" id="petAge" class="dash-input" required placeholder="3" min="0" max="30">
+                </div>
+                <div class="form-group">
+                    <label>Weight (lbs)</label>
+                    <input type="number" id="petWeight" class="dash-input" placeholder="35" min="0">
+                </div>
+                <div class="dash-modal-actions">
+                    <button type="button" class="dash-cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="dash-cta-btn">Register Pet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | PawLenx — Enterprise Pet Care</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/subpage.css">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .auth-header h1 {
+            color: #2e3333;
+            margin-bottom: 10px;
+            font-size: 2.4rem;
+        }
+        .auth-header p {
+            color: #616666;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2e3333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d8dbdb;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #0076a3;
+        }
+        .btn-auth {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            background: #0076a3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.2s;
+        }
+        .btn-auth:hover {
+            background: #005b7e;
+        }
+        .auth-footer {
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: #616666;
+        }
+        .auth-footer a {
+            color: #0076a3;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        #auth-error {
+            color: #d93025;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header" style="background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div class="container">
+          <nav class="navbar">
+            <a href="index.html" class="logo">
+              <img class="logo-icon" src="static/Happy pets in a circular arrangement.png" alt="PawLenx Logo" width="44" height="44">
+              <span class="logo-text">PawLenx</span>
+            </a>
+          </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1>Create Account</h1>
+                <p>Join the enterprise pet care revolution.</p>
+            </div>
+
+            <div id="auth-error"></div>
+
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Choose a strong password" required>
+                </div>
+                <button type="submit" class="btn-auth">Sign Up</button>
+            </form>
+
+            <div class="auth-footer">
+                Already have an account? <a href="login.html">Log In</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Redirect if already logged in
+        if (PawLenx.isLoggedIn()) window.location.href = 'dashboard.html';
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.disabled = true;
+            btn.textContent = 'Creating Account...';
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('auth-error');
+
+            try {
+                const data = await PawLenx.apiCall('/auth/signup', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                if (data && data.success) {
+                    localStorage.setItem('pawlenxToken', data.token);
+                    localStorage.setItem('pawlenxUser', data.name);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    errorDiv.textContent = (data && data.error) || 'Signup failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Server connection failed. Is the backend running?';
+                errorDiv.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sign Up';
+            }
+        });
+    </script>
+</body>
+</html>

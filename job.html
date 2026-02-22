@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View job details and apply at PawLenx.">
+  <title>Job — PawLenx</title>
+
+  <!-- Open Graph meta for LinkedIn / social sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PawLenx">
+  <meta property="og:title" content="We're Hiring — PawLenx" id="ogTitle">
+  <meta property="og:description" content="Join PawLenx and help build the future of AI-powered pet care." id="ogDesc">
+  <meta property="og:image" content="static/Happy pets in a circular arrangement.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/subpage.css">
+  <link rel="stylesheet" href="css/careers.css">
+  <link rel="icon" type="image/png" href="static/Happy pets in a circular arrangement.png">
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <header class="main-header" id="mainHeader">
+    <div class="container">
+      <nav class="navbar">
+        <a href="index.html" class="logo" aria-label="PawLenx Home">
+          <img class="logo-icon" src="static/Happy pets in a circular arrangement.png" alt="PawLenx Logo" width="44" height="44">
+          <span class="logo-text">PawLenx</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li class="nav-item has-dropdown">
+            <a href="#" class="nav-link">Our Services <svg class="chevron" width="12" height="12" viewBox="0 0 12 12"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+            <div class="dropdown-menu">
+              <div class="dropdown-content">
+                <div class="dropdown-section">
+                  <h4>Companionship</h4>
+                  <a href="pet-matching.html">Pet Matching</a>
+                  <a href="breed-compatibility.html">Breed Compatibility</a>
+                  <a href="family-pet-advisor.html">Family Pet Advisor</a>
+                </div>
+                <div class="dropdown-section">
+                  <h4>Nutrition</h4>
+                  <a href="diet-plans.html">Diet Plans</a>
+                  <a href="supplement-guide.html">Supplement Guide</a>
+                  <a href="allergy-solutions.html">Allergy Solutions</a>
+                </div>
+                <div class="dropdown-section">
+                  <h4>AI Solutions</h4>
+                  <a href="health-scanner.html">Health Scanner</a>
+                  <a href="behavior-analysis.html">Behavior Analysis</a>
+                  <a href="smart-monitoring.html">Smart Monitoring</a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item"><a href="index.html#companionship" class="nav-link">Companionship</a></li>
+          <li class="nav-item"><a href="index.html#nutrition" class="nav-link">Nutrition</a></li>
+          <li class="nav-item"><a href="index.html#ai-section" class="nav-link">Pet AI</a></li>
+          <li class="nav-item"><a href="careers.html" class="nav-link active">Careers</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a href="login.html" class="btn btn-text">Log In</a>
+          <a href="signup.html" class="btn btn-primary">Sign Up</a>
+        </div>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="subpage-hero" style="min-height: 360px;">
+    <div class="subpage-hero-bg">
+      <img src="static/Happy moments in the park.png" alt="Join the PawLenx team" loading="eager">
+    </div>
+    <div class="subpage-hero-overlay"></div>
+    <div class="container">
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="careers.html">Careers</a>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span id="breadcrumbTitle">Position</span>
+      </nav>
+      <h1 class="subpage-title" id="heroTitle">Loading...</h1>
+      <p class="subpage-subtitle" id="heroSubtitle"></p>
+    </div>
+  </section>
+
+  <!-- ========== JOB DETAIL ========== -->
+  <section class="subpage-section">
+    <div class="container">
+      <div class="job-detail-page" id="jobDetailPage">
+        <!-- Content populated by JS -->
+      </div>
+
+      <!-- Not Found State -->
+      <div class="job-not-found" id="jobNotFound" style="display:none;">
+        <div class="job-not-found-icon">🔍</div>
+        <h2>Position Not Found</h2>
+        <p>The job you're looking for may have been filled or removed.</p>
+        <a href="careers.html" class="btn btn-primary">View All Openings</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">
+            <img class="logo-icon" src="static/Happy pets in a circular arrangement.png" alt="PawLenx Logo" width="40" height="40">
+            <span class="logo-text">PawLenx</span>
+          </a>
+          <p class="footer-desc">AI-powered pet care for the modern pet parent.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="pet-matching.html">Pet Matching</a></li>
+            <li><a href="diet-plans.html">Diet Plans</a></li>
+            <li><a href="health-scanner.html">AI Health Scanner</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="index.html#about">About Us</a></li>
+            <li><a href="careers.html">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 PawLenx, Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/jobs-data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const jobId = params.get('id');
+      const job = jobId ? JOBS_DATA[jobId] : null;
+
+      if (!job) {
+        document.getElementById('jobDetailPage').style.display = 'none';
+        document.getElementById('jobNotFound').style.display = 'flex';
+        document.getElementById('heroTitle').textContent = 'Position Not Found';
+        document.getElementById('heroSubtitle').textContent = '';
+        return;
+      }
+
+      // Update page meta
+      document.title = `${job.title} — PawLenx Careers`;
+      document.getElementById('ogTitle').content = `${job.title} — PawLenx`;
+      document.getElementById('ogDesc').content = job.description;
+      document.getElementById('breadcrumbTitle').textContent = job.title;
+      document.getElementById('heroTitle').textContent = job.title;
+      document.getElementById('heroSubtitle').textContent = job.subtitle + ' · ' + job.department + ' Department';
+
+      // Build job detail content
+      const applyUrl = `apply.html?job=${encodeURIComponent(job.title)}&dept=${encodeURIComponent(job.department)}`;
+
+      let html = '';
+
+      // Header card with meta + apply
+      html += `
+        <div class="job-detail-header">
+          <div class="job-detail-meta">
+            <span class="job-tag job-tag--dept">${job.department}</span>
+            <span class="job-tag job-tag--type">${job.type}</span>
+            <span class="job-tag job-tag--loc">${job.location}</span>
+          </div>
+          <div class="job-detail-actions">
+            <a href="${applyUrl}" class="btn btn-primary">Apply for This Role</a>
+            <button class="btn btn-outline job-share-btn" id="shareBtn" title="Copy link to share">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              Share
+            </a>
+          </div>
+        </div>
+      `;
+
+      // Description
+      html += `
+        <div class="job-detail-description">
+          <p>${job.description}</p>
+        </div>
+      `;
+
+      // Sections
+      job.sections.forEach(section => {
+        html += `<div class="job-section"><h4>${section.title}</h4>`;
+
+        if (section.type === 'tools') {
+          html += '<div class="job-tools">';
+          section.items.forEach(tool => {
+            html += `<span class="job-tool">${tool}</span>`;
+          });
+          html += '</div>';
+        } else {
+          const cls = section.type === 'list-green' ? 'job-responsibilities job-responsibilities--green' : 'job-responsibilities';
+          html += `<ul class="${cls}">`;
+          section.items.forEach(item => {
+            html += `<li>${item}</li>`;
+          });
+          html += '</ul>';
+        }
+
+        html += '</div>';
+      });
+
+      // Compensation details
+      html += `
+        <div class="job-details">
+          <span>💰 ${job.salary}</span>
+          <span>📍 ${job.locationDetail}</span>
+          <span>🕐 ${job.schedule}</span>
+        </div>
+      `;
+
+      // Bottom apply CTA
+      html += `
+        <div class="job-detail-cta">
+          <h3>Interested in this role?</h3>
+          <p>Submit your application and our team will review it within 5 business days.</p>
+          <a href="${applyUrl}" class="btn btn-primary btn-lg">Apply Now</a>
+          <a href="careers.html" class="btn btn-outline">← View All Openings</a>
+        </div>
+      `;
+
+      document.getElementById('jobDetailPage').innerHTML = html;
+
+      // Share button
+      document.getElementById('shareBtn').addEventListener('click', () => {
+        const url = window.location.href;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(() => {
+            const btn = document.getElementById('shareBtn');
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+            setTimeout(() => {
+              btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share';
+            }, 2000);
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
