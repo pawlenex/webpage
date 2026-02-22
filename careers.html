@@ -134,6 +134,16 @@
       <h2 class="section-title">Find Your Role</h2>
       <p class="section-desc">Explore our current openings and find the perfect fit for your skills and passion.</p>
 
+      <!-- Search Box -->
+      <div class="job-search-wrapper">
+        <div class="job-search-box">
+          <svg class="job-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="jobSearchInput" class="job-search-input" placeholder="Search positions by title, skill, or keyword..." autocomplete="off">
+          <button type="button" id="jobSearchClear" class="job-search-clear" style="display:none;" aria-label="Clear search">&times;</button>
+        </div>
+        <p class="job-search-count" id="jobSearchCount"></p>
+      </div>
+
       <!-- Filter Tabs -->
       <div class="job-filters">
         <button class="job-filter-btn active" data-filter="all">All Roles</button>
@@ -348,27 +358,66 @@
 
   <script src="js/main.js"></script>
   <script>
-    // Job filter functionality
+    // Job filter + search functionality
     document.addEventListener('DOMContentLoaded', () => {
       const filterBtns = document.querySelectorAll('.job-filter-btn');
       const jobCards = document.querySelectorAll('.job-card');
+      const searchInput = document.getElementById('jobSearchInput');
+      const searchClear = document.getElementById('jobSearchClear');
+      const searchCount = document.getElementById('jobSearchCount');
+
+      function getActiveFilter() {
+        const activeBtn = document.querySelector('.job-filter-btn.active');
+        return activeBtn ? activeBtn.dataset.filter : 'all';
+      }
+
+      function filterAndSearch() {
+        const filter = getActiveFilter();
+        const query = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        jobCards.forEach(card => {
+          const matchesFilter = (filter === 'all' || card.dataset.category === filter);
+          const cardText = card.textContent.toLowerCase();
+          const matchesSearch = !query || cardText.includes(query);
+
+          if (matchesFilter && matchesSearch) {
+            card.style.display = '';
+            card.style.animation = 'fadeInUp 0.4s ease forwards';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        // Show/hide clear button
+        searchClear.style.display = query ? 'flex' : 'none';
+
+        // Update result count
+        if (query) {
+          searchCount.textContent = visibleCount === 0
+            ? 'No positions found matching "' + searchInput.value.trim() + '"'
+            : visibleCount + ' position' + (visibleCount !== 1 ? 's' : '') + ' found';
+          searchCount.style.display = 'block';
+        } else {
+          searchCount.style.display = 'none';
+        }
+      }
 
       filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           filterBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-
-          const filter = btn.dataset.filter;
-
-          jobCards.forEach(card => {
-            if (filter === 'all' || card.dataset.category === filter) {
-              card.style.display = '';
-              card.style.animation = 'fadeInUp 0.4s ease forwards';
-            } else {
-              card.style.display = 'none';
-            }
-          });
+          filterAndSearch();
         });
+      });
+
+      searchInput.addEventListener('input', filterAndSearch);
+
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        filterAndSearch();
+        searchInput.focus();
       });
     });
   </script>

@@ -2,6 +2,77 @@
    PawLenx — Careers & Application Styles
    ============================================================ */
 
+/* ─── Job Search Box ─── */
+.job-search-wrapper {
+  margin-top: 32px;
+}
+
+.job-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 520px;
+}
+
+.job-search-icon {
+  position: absolute;
+  left: 16px;
+  color: #94A3B8;
+  pointer-events: none;
+}
+
+.job-search-input {
+  width: 100%;
+  padding: 14px 44px 14px 48px;
+  border: 2px solid #E2E8F0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Nunito Sans', sans-serif;
+  background: #F8FAFC;
+  color: #1E293B;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  outline: none;
+}
+
+.job-search-input::placeholder {
+  color: #94A3B8;
+}
+
+.job-search-input:focus {
+  border-color: #38BDF8;
+  background: #FFF;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+}
+
+.job-search-clear {
+  position: absolute;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #E2E8F0;
+  color: #64748B;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.job-search-clear:hover {
+  background: #CBD5E1;
+  color: #1E293B;
+}
+
+.job-search-count {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #64748B;
+  display: none;
+}
+
 /* ─── Job Filters ─── */
 .job-filters {
   display: flex;
