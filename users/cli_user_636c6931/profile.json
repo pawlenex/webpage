@@ -1,0 +1,7 @@
+{
+  "name": "CLI User",
+  "email": "cli@example.com",
+  "password": "$2a$10$NC7RUUEbuT16qaowAQraVutTIyJWLa04yHcPHbxLDwwrGTsr5/wqW",
+  "createdAt": "2026-02-23T20:34:01.023Z",
+  "pets": []
+}
