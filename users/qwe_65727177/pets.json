@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": 1771877960427,
+    "name": "wef",
+    "breed": "ww",
+    "age": "3",
+    "type": "Fish",
+    "weight": null,
+    "photo": null,
+    "addedAt": "2026-02-23T20:19:20.427Z"
+  }
+]
