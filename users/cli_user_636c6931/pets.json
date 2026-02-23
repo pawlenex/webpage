@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": 1771878853391,
+    "name": "CLI Pet",
+    "breed": "Beagle",
+    "age": "2",
+    "type": "Dog",
+    "weight": "20",
+    "photo": "https://raw.githubusercontent.com/pawlenex/webpage/main/users/cli_user_636c6931/photos/1771878851647_CLI_Pet.png",
+    "addedAt": "2026-02-23T20:34:13.391Z"
+  }
+]
