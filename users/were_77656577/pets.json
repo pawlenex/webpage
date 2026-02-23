@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": 1771879444224,
+    "name": "ewre",
+    "breed": "ewe",
+    "age": "3",
+    "type": "Bird",
+    "weight": "3",
+    "photo": null,
+    "addedAt": "2026-02-23T20:44:04.224Z"
+  }
+]
