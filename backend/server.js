@@ -297,16 +297,38 @@ app.get('/api/user/dashboard', authMiddleware, async (req, res) => {
   }
 });
 
-// ADD PET (with optional photo upload)
+// ADD / UPDATE PET (with optional photo upload)
 const petPhotoUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) cb(null, true);
+    if (file.mimetype && file.mimetype.startsWith('image/')) cb(null, true);
     else cb(new Error('Only image files allowed'), false);
   }
 }).single('petPhoto');
 
+// Helper to upload a pet photo to GitHub and return its raw URL
+async function uploadPetPhotoToGitHub(folder, petName, file) {
+  if (!file) return null;
+
+  const safeName = (petName || 'pet').replace(/[^a-zA-Z0-9]/g, '_');
+  const ext = (file.originalname && file.originalname.includes('.'))
+    ? file.originalname.split('.').pop()
+    : 'jpg';
+  const photoFileName = `${Date.now()}_${safeName}.${ext}`;
+  const photoPath = `users/${folder}/photos/${photoFileName}`;
+  const base64Content = file.buffer.toString('base64');
+
+  await ghApi.put(`/contents/${photoPath}`, {
+    message: `Upload pet photo: ${petName || 'Pet'}`,
+    content: base64Content,
+    branch: GITHUB_BRANCH
+  });
+
+  return `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${photoPath}`;
+}
+
+// Create pet
 app.post('/api/user/pets', authMiddleware, (req, res) => {
   petPhotoUpload(req, res, async (uploadErr) => {
     if (uploadErr) {
@@ -316,22 +338,7 @@ app.post('/api/user/pets', authMiddleware, (req, res) => {
       const folder = req.user.folderName;
       const { petName, petBreed, petAge, petType, petWeight } = req.body;
 
-      let photoUrl = null;
-      // Upload photo to GitHub if present
-      if (req.file) {
-        const ext = req.file.originalname.split('.').pop() || 'jpg';
-        const photoFileName = `${Date.now()}_${petName.replace(/[^a-zA-Z0-9]/g, '_')}.${ext}`;
-        const photoPath = `users/${folder}/photos/${photoFileName}`;
-        const base64Content = req.file.buffer.toString('base64');
-
-        await ghApi.put(`/contents/${photoPath}`, {
-          message: `Upload pet photo: ${petName}`,
-          content: base64Content,
-          branch: GITHUB_BRANCH
-        });
-
-        photoUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${photoPath}`;
-      }
+      const photoUrl = await uploadPetPhotoToGitHub(folder, petName, req.file);
 
       const petsFilePath = `users/${folder}/pets.json`;
       const existingPets = await readGhFile(petsFilePath);
@@ -348,12 +355,71 @@ app.post('/api/user/pets', authMiddleware, (req, res) => {
       };
 
       const updatedPets = [newPet, ...(existingPets ? existingPets.data : [])];
-      await writeGhFile(petsFilePath, updatedPets, `Add pet: ${petName}`, existingPets ? existingPets.sha : null);
+      await writeGhFile(
+        petsFilePath,
+        updatedPets,
+        `Add pet: ${petName}`,
+        existingPets ? existingPets.sha : null
+      );
 
       res.json({ success: true, pet: newPet });
     } catch (err) {
       console.error('Add pet error:', err);
       res.status(500).json({ error: 'Failed to add pet' });
+    }
+  });
+});
+
+// Update existing pet (optionally with new photo)
+app.put('/api/user/pets/:id', authMiddleware, (req, res) => {
+  petPhotoUpload(req, res, async (uploadErr) => {
+    if (uploadErr) {
+      return res.status(400).json({ error: uploadErr.message });
+    }
+
+    try {
+      const folder = req.user.folderName;
+      const petId = Number(req.params.id);
+      const { petName, petBreed, petAge, petType, petWeight } = req.body;
+
+      const petsFilePath = `users/${folder}/pets.json`;
+      const existingPets = await readGhFile(petsFilePath);
+      const pets = existingPets && Array.isArray(existingPets.data) ? existingPets.data : [];
+
+      const index = pets.findIndex(p => Number(p.id) === petId);
+      if (index === -1) {
+        return res.status(404).json({ error: 'Pet not found' });
+      }
+
+      let photoUrl = pets[index].photo || null;
+      if (req.file) {
+        // If a new photo is uploaded, replace the existing URL
+        photoUrl = await uploadPetPhotoToGitHub(folder, petName || pets[index].name, req.file);
+      }
+
+      const updatedPet = {
+        ...pets[index],
+        name: petName,
+        breed: petBreed,
+        age: petAge,
+        type: petType,
+        weight: petWeight || null,
+        photo: photoUrl
+      };
+
+      pets[index] = updatedPet;
+
+      await writeGhFile(
+        petsFilePath,
+        pets,
+        `Update pet: ${updatedPet.name}`,
+        existingPets ? existingPets.sha : null
+      );
+
+      res.json({ success: true, pet: updatedPet });
+    } catch (err) {
+      console.error('Update pet error:', err);
+      res.status(500).json({ error: 'Failed to update pet' });
     }
   });
 });

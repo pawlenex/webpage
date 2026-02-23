@@ -13,6 +13,7 @@ let userPets = [];
 let userActivities = [];
 let userMeals = [];
 let userScans = [];
+let editingPetId = null;
 
 // ─── Init ───
 document.addEventListener('DOMContentLoaded', () => {
@@ -125,8 +126,8 @@ function renderPetGrid(containerId, pets) {
 
     grid.innerHTML = pets.map(pet => `
         <div class="pet-card">
-            ${pet.photo 
-                ? `<img src="${pet.photo}" alt="${pet.name}" class="pet-card-photo" onerror="this.outerHTML='<div class=\\'pet-card-photo-placeholder\\'>${petEmojis[pet.type] || petEmojis.Other}</div>'">`
+            ${pet.photo && typeof pet.photo === 'string'
+                ? `<img src="${pet.photo}" alt="${pet.name}" class="pet-card-photo">`
                 : `<div class="pet-card-photo-placeholder" style="background: ${petColors[pet.type] || petColors.Other};">${petEmojis[pet.type] || petEmojis.Other}</div>`
             }
             <div class="pet-card-body">
@@ -139,6 +140,7 @@ function renderPetGrid(containerId, pets) {
                     <button class="pet-action-btn" onclick="quickScan('${pet.name}')">🔬 AI Scan</button>
                     <button class="pet-action-btn" onclick="quickMeal('${pet.name}')">🍖 Log Meal</button>
                     <button class="pet-action-btn" onclick="quickActivity('${pet.name}')">🏃 Activity</button>
+                    <button class="pet-action-btn" onclick="openModal(${pet.id})">✏️ Edit</button>
                 </div>
             </div>
         </div>
@@ -417,12 +419,64 @@ function timeAgo(dateStr) {
 }
 
 // ─── Modal ───
-function openModal() {
-    document.getElementById('petModal').classList.add('open');
+function openModal(petId) {
+    const modal = document.getElementById('petModal');
+    const header = modal.querySelector('.dash-modal-header h2');
+    const submitBtn = modal.querySelector('.dash-modal-actions button[type="submit"]');
+    const form = document.getElementById('pet-form');
+
+    const preview = document.getElementById('photoPreview');
+    const placeholder = document.getElementById('photoPlaceholder');
+
+    if (petId) {
+        // Edit mode
+        editingPetId = petId;
+        const pet = userPets.find(p => Number(p.id) === Number(petId));
+        if (pet) {
+            header.textContent = 'Edit Pet';
+            submitBtn.textContent = 'Save Changes';
+
+            form.petName.value = pet.name || '';
+            form.petType.value = pet.type || 'Dog';
+            form.petBreed.value = pet.breed || '';
+            form.petAge.value = pet.age || '';
+            form.petWeight.value = pet.weight || '';
+
+            // Show existing photo if available
+            if (pet.photo) {
+                preview.src = pet.photo;
+                preview.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                preview.style.display = 'none';
+                placeholder.style.display = 'flex';
+            }
+        }
+    } else {
+        // Create mode
+        editingPetId = null;
+        header.textContent = 'Register Your Pet';
+        submitBtn.textContent = 'Register Pet';
+        form.reset();
+        preview.style.display = 'none';
+        placeholder.style.display = 'flex';
+    }
+
+    modal.classList.add('open');
 }
 
 function closeModal() {
-    document.getElementById('petModal').classList.remove('open');
+    const modal = document.getElementById('petModal');
+    const form = document.getElementById('pet-form');
+    const preview = document.getElementById('photoPreview');
+    const placeholder = document.getElementById('photoPlaceholder');
+
+    editingPetId = null;
+    form.reset();
+    preview.style.display = 'none';
+    placeholder.style.display = 'flex';
+
+    modal.classList.remove('open');
 }
 
 // ─── Photo Preview ───
@@ -440,13 +494,13 @@ function previewPetPhoto(input) {
     }
 }
 
-// ─── Add Pet Form (with photo upload) ───
+// ─── Add / Edit Pet Form (with photo upload) ───
 document.getElementById('pet-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
     const originalText = btn.textContent;
     btn.disabled = true;
-    btn.textContent = 'Registering...';
+    btn.textContent = editingPetId ? 'Saving...' : 'Registering...';
 
     const formData = new FormData();
     formData.append('petName', document.getElementById('petName').value);
@@ -461,17 +515,16 @@ document.getElementById('pet-form').addEventListener('submit', async (e) => {
     }
 
     try {
-        const data = await PawLenx.apiCall('/user/pets', {
-            method: 'POST',
+        const endpoint = editingPetId ? `/user/pets/${editingPetId}` : '/user/pets';
+        const method = editingPetId ? 'PUT' : 'POST';
+
+        const data = await PawLenx.apiCall(endpoint, {
+            method,
             body: formData
         });
 
         if (data && data.success) {
             closeModal();
-            e.target.reset();
-            // Reset photo preview
-            document.getElementById('photoPreview').style.display = 'none';
-            document.getElementById('photoPlaceholder').style.display = 'flex';
             loadDashboard(); // Refresh everything
         } else {
             alert((data && data.error) || 'Failed to register pet');
