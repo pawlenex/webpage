@@ -101,19 +101,79 @@
                     </div>
                 </div>
 
-                <div class="dash-section-header">
-                    <h2>Your Pets</h2>
-                    <a href="#" onclick="switchPanel('pets'); return false;">View All →</a>
-                </div>
-                <div class="pet-grid" id="overview-pet-grid">
-                    <div class="dash-empty-state">Loading...</div>
-                </div>
+                <!-- === FACEBOOK-STYLE FEED LAYOUT === -->
+                <div class="feed-layout">
+                    <!-- LEFT COLUMN: Social Content -->
+                    <div class="feed-left">
+                        <div class="feed-section-title">🐾 Pet Community Stories</div>
 
-                <div class="dash-section-header" style="margin-top: 40px;">
-                    <h2>Recent Activity</h2>
-                </div>
-                <div class="dash-activity-feed" id="overview-activity">
-                    <div class="dash-empty-state">No recent activity yet.</div>
+                        <!-- Post 1 -->
+                        <div class="feed-post">
+                            <div class="feed-post-header">
+                                <div class="feed-avatar">🐶</div>
+                                <div>
+                                    <strong class="feed-author">PawLenx Wellness</strong>
+                                    <span class="feed-time">Today at 9:00 AM</span>
+                                </div>
+                            </div>
+                            <p class="feed-text">Studies show that spending just 15 minutes with your pet can reduce cortisol levels by up to 30%. The bond between humans and animals is one of nature's most powerful stress relievers. Never underestimate a cuddle session! 💛</p>
+                            <img src="static/pet-stress-relief.png" alt="Reduces Stress & Anxiety" class="feed-image">
+                            <div class="feed-actions">
+                                <button class="feed-action-btn" onclick="this.classList.toggle('liked')">❤️ <span>248</span></button>
+                                <button class="feed-action-btn">💬 <span>32</span></button>
+                                <button class="feed-action-btn">🔗 Share</button>
+                            </div>
+                        </div>
+
+                        <!-- Post 2 -->
+                        <div class="feed-post">
+                            <div class="feed-post-header">
+                                <div class="feed-avatar">🏥</div>
+                                <div>
+                                    <strong class="feed-author">PawLenx Health</strong>
+                                    <span class="feed-time">Yesterday at 2:30 PM</span>
+                                </div>
+                            </div>
+                            <p class="feed-text">The science-backed benefits of pet companionship go far beyond just having fun. From reducing stress and anxiety, to providing comfort and security for children, encouraging physical activity, and easing loneliness for seniors — pets truly transform lives at every stage. 🐾</p>
+                            <img src="static/pet-benefits-grid.png" alt="4 Benefits of Pet Companionship" class="feed-image">
+                            <div class="feed-actions">
+                                <button class="feed-action-btn" onclick="this.classList.toggle('liked')">❤️ <span>512</span></button>
+                                <button class="feed-action-btn">💬 <span>89</span></button>
+                                <button class="feed-action-btn">🔗 Share</button>
+                            </div>
+                        </div>
+
+                        <!-- Post 3 -->
+                        <div class="feed-post">
+                            <div class="feed-post-header">
+                                <div class="feed-avatar">🎓</div>
+                                <div>
+                                    <strong class="feed-author">PawLenx Training</strong>
+                                    <span class="feed-time">Feb 20 at 11:15 AM</span>
+                                </div>
+                            </div>
+                            <p class="feed-text">Positive reinforcement is the gold standard for pet training. Use treats, praise, and patience — never punishment. Start with short 5-minute sessions and always end on a success. Consistency is the key to a well-behaved, happy pet. 🎯</p>
+                            <img src="static/pet-training.png" alt="Training Pets" class="feed-image">
+                            <div class="feed-actions">
+                                <button class="feed-action-btn" onclick="this.classList.toggle('liked')">❤️ <span>376</span></button>
+                                <button class="feed-action-btn">💬 <span>54</span></button>
+                                <button class="feed-action-btn">🔗 Share</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Pets + Activity -->
+                    <div class="feed-right">
+                        <div class="feed-section-title">Your Pets</div>
+                        <div class="pet-grid pet-grid-compact" id="overview-pet-grid">
+                            <div class="dash-empty-state">Loading...</div>
+                        </div>
+
+                        <div class="feed-section-title" style="margin-top: 24px;">Recent Activity</div>
+                        <div class="dash-activity-feed" id="overview-activity">
+                            <div class="dash-empty-state">No recent activity yet.</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -309,6 +369,18 @@
                 <div class="form-group">
                     <label>Weight (lbs)</label>
                     <input type="number" id="petWeight" class="dash-input" placeholder="35" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Pet Photo</label>
+                    <div class="photo-upload-area" id="photoUploadArea" onclick="document.getElementById('petPhoto').click()">
+                        <input type="file" id="petPhoto" accept="image/*" style="display:none" onchange="previewPetPhoto(this)">
+                        <div class="photo-upload-placeholder" id="photoPlaceholder">
+                            <span class="photo-upload-icon">📷</span>
+                            <span>Click to upload a photo</span>
+                            <span class="photo-upload-hint">JPG, PNG up to 5MB</span>
+                        </div>
+                        <img id="photoPreview" class="photo-preview-img" style="display:none" alt="Pet preview">
+                    </div>
                 </div>
                 <div class="dash-modal-actions">
                     <button type="button" class="dash-cancel-btn" onclick="closeModal()">Cancel</button>

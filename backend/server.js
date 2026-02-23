@@ -297,33 +297,65 @@ app.get('/api/user/dashboard', authMiddleware, async (req, res) => {
   }
 });
 
-// ADD PET
-app.post('/api/user/pets', authMiddleware, async (req, res) => {
-  try {
-    const folder = req.user.folderName;
-    const { petName, petBreed, petAge, petType, petWeight } = req.body;
-
-    const petsFilePath = `users/${folder}/pets.json`;
-    const existingPets = await readGhFile(petsFilePath);
-
-    const newPet = {
-      id: Date.now(),
-      name: petName,
-      breed: petBreed,
-      age: petAge,
-      type: petType,
-      weight: petWeight || null,
-      addedAt: new Date().toISOString()
-    };
-
-    const updatedPets = [newPet, ...(existingPets ? existingPets.data : [])];
-    await writeGhFile(petsFilePath, updatedPets, `Add pet: ${petName}`, existingPets ? existingPets.sha : null);
-
-    res.json({ success: true, pet: newPet });
-  } catch (err) {
-    console.error('Add pet error:', err);
-    res.status(500).json({ error: 'Failed to add pet' });
+// ADD PET (with optional photo upload)
+const petPhotoUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Only image files allowed'), false);
   }
+}).single('petPhoto');
+
+app.post('/api/user/pets', authMiddleware, (req, res) => {
+  petPhotoUpload(req, res, async (uploadErr) => {
+    if (uploadErr) {
+      return res.status(400).json({ error: uploadErr.message });
+    }
+    try {
+      const folder = req.user.folderName;
+      const { petName, petBreed, petAge, petType, petWeight } = req.body;
+
+      let photoUrl = null;
+      // Upload photo to GitHub if present
+      if (req.file) {
+        const ext = req.file.originalname.split('.').pop() || 'jpg';
+        const photoFileName = `${Date.now()}_${petName.replace(/[^a-zA-Z0-9]/g, '_')}.${ext}`;
+        const photoPath = `users/${folder}/photos/${photoFileName}`;
+        const base64Content = req.file.buffer.toString('base64');
+
+        await ghApi.put(`/contents/${photoPath}`, {
+          message: `Upload pet photo: ${petName}`,
+          content: base64Content,
+          branch: GITHUB_BRANCH
+        });
+
+        photoUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${photoPath}`;
+      }
+
+      const petsFilePath = `users/${folder}/pets.json`;
+      const existingPets = await readGhFile(petsFilePath);
+
+      const newPet = {
+        id: Date.now(),
+        name: petName,
+        breed: petBreed,
+        age: petAge,
+        type: petType,
+        weight: petWeight || null,
+        photo: photoUrl,
+        addedAt: new Date().toISOString()
+      };
+
+      const updatedPets = [newPet, ...(existingPets ? existingPets.data : [])];
+      await writeGhFile(petsFilePath, updatedPets, `Add pet: ${petName}`, existingPets ? existingPets.sha : null);
+
+      res.json({ success: true, pet: newPet });
+    } catch (err) {
+      console.error('Add pet error:', err);
+      res.status(500).json({ error: 'Failed to add pet' });
+    }
+  });
 });
 
 // Submit application (receive Application PDF + Resume PDF)

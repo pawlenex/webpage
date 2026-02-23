@@ -125,9 +125,10 @@ function renderPetGrid(containerId, pets) {
 
     grid.innerHTML = pets.map(pet => `
         <div class="pet-card">
-            <div class="pet-card-header" style="background: ${petColors[pet.type] || petColors.Other};">
-                ${petEmojis[pet.type] || petEmojis.Other}
-            </div>
+            ${pet.photo 
+                ? `<img src="${pet.photo}" alt="${pet.name}" class="pet-card-photo" onerror="this.outerHTML='<div class=\\'pet-card-photo-placeholder\\'>${petEmojis[pet.type] || petEmojis.Other}</div>'">`
+                : `<div class="pet-card-photo-placeholder" style="background: ${petColors[pet.type] || petColors.Other};">${petEmojis[pet.type] || petEmojis.Other}</div>`
+            }
             <div class="pet-card-body">
                 <span class="pet-badge ${(pet.type || 'other').toLowerCase()}">${pet.type || 'Pet'}</span>
                 <h3>${pet.name}</h3>
@@ -424,7 +425,22 @@ function closeModal() {
     document.getElementById('petModal').classList.remove('open');
 }
 
-// ─── Add Pet Form ───
+// ─── Photo Preview ───
+function previewPetPhoto(input) {
+    const preview = document.getElementById('photoPreview');
+    const placeholder = document.getElementById('photoPlaceholder');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            placeholder.style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// ─── Add Pet Form (with photo upload) ───
 document.getElementById('pet-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = e.target.querySelector('button[type="submit"]');
@@ -432,23 +448,30 @@ document.getElementById('pet-form').addEventListener('submit', async (e) => {
     btn.disabled = true;
     btn.textContent = 'Registering...';
 
-    const petData = {
-        petName: document.getElementById('petName').value,
-        petType: document.getElementById('petType').value,
-        petBreed: document.getElementById('petBreed').value,
-        petAge: document.getElementById('petAge').value,
-        petWeight: document.getElementById('petWeight').value
-    };
+    const formData = new FormData();
+    formData.append('petName', document.getElementById('petName').value);
+    formData.append('petType', document.getElementById('petType').value);
+    formData.append('petBreed', document.getElementById('petBreed').value);
+    formData.append('petAge', document.getElementById('petAge').value);
+    formData.append('petWeight', document.getElementById('petWeight').value);
+
+    const photoInput = document.getElementById('petPhoto');
+    if (photoInput.files && photoInput.files[0]) {
+        formData.append('petPhoto', photoInput.files[0]);
+    }
 
     try {
         const data = await PawLenx.apiCall('/user/pets', {
             method: 'POST',
-            body: JSON.stringify(petData)
+            body: formData
         });
 
         if (data && data.success) {
             closeModal();
             e.target.reset();
+            // Reset photo preview
+            document.getElementById('photoPreview').style.display = 'none';
+            document.getElementById('photoPlaceholder').style.display = 'flex';
             loadDashboard(); // Refresh everything
         } else {
             alert((data && data.error) || 'Failed to register pet');
