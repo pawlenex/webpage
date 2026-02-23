@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": 1771879098088,
+    "name": "sdf",
+    "breed": "ss",
+    "age": "3",
+    "type": "Bird",
+    "weight": "23",
+    "photo": null,
+    "addedAt": "2026-02-23T20:38:18.088Z"
+  }
+]
