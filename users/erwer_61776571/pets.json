@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1771879578077,
+    "name": "ee",
+    "breed": "ewe",
+    "age": "3",
+    "type": "Dog",
+    "weight": "4",
+    "photo": "https://raw.githubusercontent.com/pawlenex/webpage/main/users/erwer_61776571/photos/1771879621429_ee.png",
+    "addedAt": "2026-02-23T20:46:18.077Z"
+  },
+  {
+    "id": 1771879525868,
+    "name": "qwew",
+    "breed": "qwe",
+    "age": "2",
+    "type": "Bird",
+    "weight": "3",
+    "photo": "https://raw.githubusercontent.com/pawlenex/webpage/main/users/erwer_61776571/photos/1771879635095_qwew.png",
+    "addedAt": "2026-02-23T20:45:25.869Z"
+  }
+]
