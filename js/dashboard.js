@@ -121,8 +121,8 @@ function renderPetGrid(containerId, pets) {
         return;
     }
 
-    const petEmojis = { Dog: '🐶', Cat: '🐱', Bird: '🐦', Fish: '🐠', Rabbit: '🐰', Other: '🐾' };
-    const petColors = { Dog: '#e3f2fd', Cat: '#fce4ec', Bird: '#e8f5e9', Fish: '#e0f7fa', Rabbit: '#f3e5f5', Other: '#fff3e0' };
+    const petEmojis = { Dog: '🐶', Cat: '🐱', Fish: '🐠', Other: '🐾' };
+    const petColors = { Dog: '#e3f2fd', Cat: '#fce4ec', Fish: '#e0f7fa', Other: '#fff3e0' };
 
     grid.innerHTML = pets.map(pet => `
         <div class="pet-card">

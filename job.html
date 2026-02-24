@@ -233,6 +233,7 @@
           <span>💰 ${job.salary}</span>
           <span>📍 ${job.locationDetail}</span>
           <span>🕐 ${job.schedule}</span>
+          ${job.deadline ? `<span>📅 Deadline: ${new Date(job.deadline).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>` : ''}
         </div>
       `;
 
