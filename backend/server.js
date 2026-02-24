@@ -1,3 +1,4 @@
+// ...existing code...
 // ============================================================
 // PawLenx — Backend API Server
 // Receives job application PDFs and stores them
@@ -422,6 +423,55 @@ app.put('/api/user/pets/:id', authMiddleware, (req, res) => {
       res.status(500).json({ error: 'Failed to update pet' });
     }
   });
+});
+
+// DELETE PET
+app.delete('/api/user/pets/:id', authMiddleware, async (req, res) => {
+  try {
+    const folder = req.user.folderName;
+    const petId = Number(req.params.id);
+    const petsFilePath = `users/${folder}/pets.json`;
+    const existingPets = await readGhFile(petsFilePath);
+    const pets = existingPets && Array.isArray(existingPets.data) ? existingPets.data : [];
+    const index = pets.findIndex(p => Number(p.id) === petId);
+    if (index === -1) {
+      return res.status(404).json({ error: 'Pet not found' });
+    }
+    // If pet has a photo, delete it from GitHub
+    const pet = pets[index];
+    if (pet.photo && typeof pet.photo === 'string') {
+      // Extract the path after the branch name
+      const urlPrefix = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/`;
+      if (pet.photo.startsWith(urlPrefix)) {
+        const photoPath = pet.photo.slice(urlPrefix.length);
+        // Get the SHA of the file to delete
+        try {
+          const photoMeta = await ghApi.get(`/contents/${photoPath}?ref=${GITHUB_BRANCH}`);
+          const sha = photoMeta.data.sha;
+          await ghApi.delete(`/contents/${photoPath}`, {
+            data: {
+              message: `Delete pet photo for pet id: ${petId}`,
+              sha,
+              branch: GITHUB_BRANCH
+            }
+          });
+        } catch (err) {
+          console.error('Failed to delete pet photo from GitHub:', err.message);
+        }
+      }
+    }
+    pets.splice(index, 1);
+    await writeGhFile(
+      petsFilePath,
+      pets,
+      `Delete pet id: ${petId}`,
+      existingPets ? existingPets.sha : null
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Delete pet error:', err);
+    res.status(500).json({ error: 'Failed to delete pet' });
+  }
 });
 
 // Submit application (receive Application PDF + Resume PDF)

@@ -702,6 +702,14 @@ textarea.dash-input {
     object-fit: cover;
 }
 
+.photo-file-name {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: #64748b;
+    word-break: break-all;
+}
+
 /* ─── Social Feed Layout ─── */
 .feed-layout {
     display: grid;

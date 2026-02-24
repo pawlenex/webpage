@@ -141,10 +141,25 @@ function renderPetGrid(containerId, pets) {
                     <button class="pet-action-btn" onclick="quickMeal('${pet.name}')">🍖 Log Meal</button>
                     <button class="pet-action-btn" onclick="quickActivity('${pet.name}')">🏃 Activity</button>
                     <button class="pet-action-btn" onclick="openModal(${pet.id})">✏️ Edit</button>
+                    <button class="pet-action-btn dash-danger-btn" onclick="deletePet(${pet.id})">🗑️ Delete</button>
                 </div>
             </div>
         </div>
     `).join('');
+// ─── Delete Pet ───
+async function deletePet(petId) {
+    if (!confirm('Are you sure you want to delete this pet? This cannot be undone.')) return;
+    try {
+        const data = await PawLenx.apiCall(`/user/pets/${petId}`, { method: 'DELETE' });
+        if (data && data.success) {
+            loadDashboard();
+        } else {
+            alert((data && data.error) || 'Failed to delete pet');
+        }
+    } catch (err) {
+        alert('Failed to delete pet. Please try again.');
+    }
+}
 }
 
 // ─── Populate Pet Selects ───
@@ -153,8 +168,9 @@ function populatePetSelects() {
     selects.forEach(id => {
         const select = document.getElementById(id);
         if (!select) return;
-        select.innerHTML = userPets.map(p => `<option value="${p.name}">${p.name} (${p.type})</option>`).join('');
-        if (userPets.length === 0) {
+        const filteredPets = userPets.filter(p => p.type !== 'Bird' && p.type !== 'Rabbit');
+        select.innerHTML = filteredPets.map(p => `<option value="${p.name}">${p.name} (${p.type})</option>`).join('');
+        if (filteredPets.length === 0) {
             select.innerHTML = '<option value="">No pets registered</option>';
         }
     });
@@ -427,6 +443,7 @@ function openModal(petId) {
 
     const preview = document.getElementById('photoPreview');
     const placeholder = document.getElementById('photoPlaceholder');
+    const fileNameLabel = document.getElementById('photoFileName');
 
     if (petId) {
         // Edit mode
@@ -451,6 +468,10 @@ function openModal(petId) {
                 preview.style.display = 'none';
                 placeholder.style.display = 'flex';
             }
+
+            if (fileNameLabel) {
+                fileNameLabel.textContent = '';
+            }
         }
     } else {
         // Create mode
@@ -460,6 +481,9 @@ function openModal(petId) {
         form.reset();
         preview.style.display = 'none';
         placeholder.style.display = 'flex';
+        if (fileNameLabel) {
+            fileNameLabel.textContent = '';
+        }
     }
 
     modal.classList.add('open');
@@ -470,11 +494,16 @@ function closeModal() {
     const form = document.getElementById('pet-form');
     const preview = document.getElementById('photoPreview');
     const placeholder = document.getElementById('photoPlaceholder');
+    const fileNameLabel = document.getElementById('photoFileName');
 
     editingPetId = null;
     form.reset();
     preview.style.display = 'none';
     placeholder.style.display = 'flex';
+
+    if (fileNameLabel) {
+        fileNameLabel.textContent = '';
+    }
 
     modal.classList.remove('open');
 }
@@ -483,6 +512,7 @@ function closeModal() {
 function previewPetPhoto(input) {
     const preview = document.getElementById('photoPreview');
     const placeholder = document.getElementById('photoPlaceholder');
+    const fileNameLabel = document.getElementById('photoFileName');
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -491,6 +521,12 @@ function previewPetPhoto(input) {
             placeholder.style.display = 'none';
         };
         reader.readAsDataURL(input.files[0]);
+
+        if (fileNameLabel) {
+            fileNameLabel.textContent = input.files[0].name;
+        }
+    } else if (fileNameLabel) {
+        fileNameLabel.textContent = '';
     }
 }
 
