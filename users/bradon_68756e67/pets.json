@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": 1772230081600,
+    "name": "bradon",
+    "breed": "bradon",
+    "age": "1",
+    "type": "Cat",
+    "weight": "34",
+    "photo": "https://raw.githubusercontent.com/pawlenex/webpage/main/users/bradon_68756e67/photos/1772230079717_bradon.png",
+    "addedAt": "2026-02-27T22:08:01.600Z"
+  }
+]
