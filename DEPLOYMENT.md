@@ -1,9 +1,9 @@
 # Deployment Info
 
-- **Commit:** dab941be2f0f99af77e9bf0c4a621b2887588601
-- **Short SHA:** dab941b
-- **Branch:** deploy/20260222-015702-dab941b
+- **Commit:** 4e65e9b6a7243e9d2e6035a44208bc80022b92d9
+- **Short SHA:** 4e65e9b
+- **Branch:** deploy/20260226-051910-4e65e9b
 - **Triggered by:** pawlenex
-- **Timestamp:** 2026-02-22 01:57:02 UTC
-- **Docker Image:** ghcr.io/pawlenex/pawlenx-web:dab941b
-- **Workflow Run:** https://github.com/pawlenex/webpage/actions/runs/22268418999
+- **Timestamp:** 2026-02-26 05:19:10 UTC
+- **Docker Image:** ghcr.io/pawlenex/pawlenx-web:4e65e9b
+- **Workflow Run:** https://github.com/pawlenex/webpage/actions/runs/22428963841
